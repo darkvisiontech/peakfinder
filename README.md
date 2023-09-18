@@ -1,5 +1,5 @@
 WebPlotDigitizer + PeakFinder
-[https://softypo.github.io/WPDPeakFinder/](https://darkvisiontech.github.io/peakfinder/)
+[https://darkvisiontech.github.io/peakfinder/](https://darkvisiontech.github.io/peakfinder/)
 ================
 
 A peak detection capable variant of the award winning WPD tool to extract numerical data from plot images. Supports XY, Polar, Ternary diagrams and Maps. This is an opensource tool checkout https://automeris.io/WebPlotDigitizer for more details on WPD.
