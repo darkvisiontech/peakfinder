@@ -1,0 +1,18 @@
+<!-- Image and Page navigation bar -->
+<div id="imageAndPageNavbar">
+    <span class="files" hidden>Image: </span>
+    <div class="files" hidden><select id="image-file-select" style="width:100%;" onchange="wpd.appData.getFileManager().switch(this.value);"></select></div>
+    <div id="navSeparator" hidden></div>
+    <span class="paged" hidden>Page: </span>
+    <div class="paged" hidden><select id="image-page-nav-select" style="width:100%;" onchange="wpd.appData.getPageManager().switch(this.value);"></select></div>
+    <div class="paged" hidden><input type="button" value="{{ _("Previous") }}" style="width:100px;" onclick="wpd.appData.getPageManager().previous();" /></div>
+    <div class="paged" hidden><input type="button" value="{{ _("Next") }}" style="width:100px;" onclick="wpd.appData.getPageManager().next();" /></div>
+    <div class="paged" hidden><input type="button" value="{{ _("Page Labels") }}" style="width:100px;" onclick="wpd.popup.show('image-page-relabel-popup');" /></div>
+    <div class="paged" hidden></div>
+    <div class="paged" hidden>|</div>
+    <div class="paged" hidden><input type="button" value="{{ _("Turn 1pager") }}" style="width:100px;" onclick="softypo.onepager.run();" /></div>
+    <div class="paged" hidden>{{ _("Min:") }} <input type="text" size="3" id="min-page"/></div>
+    <div class="paged" hidden>{{ _("Max:") }} <input type="text" size="3" id="max-page"/></div>
+    <div class="paged" hidden>{{ _("Scale:") }} <input type="text" size="3" id="scale-page" value="2.0"/></div>
+    <div class="paged" hidden>|</div>
+</div>

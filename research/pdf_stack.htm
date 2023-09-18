@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PDF to PNG Converter</title>
+  <!-- Add any necessary meta tags, CSS links, or other head content here -->
+</head>
+<body>
+  <h1>PDF to PNG Converter</h1>
+  <input type="file" id="pdfInput" />
+  <button id="convertButton">Convert</button>
+  
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist"></script>
+  <script>
+    // Specify the workerSrc explicitly
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.10.111/pdf.worker.min.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const pdfInput = document.getElementById('pdfInput');
+      const convertButton = document.getElementById('convertButton');
+      
+      convertButton.addEventListener('click', async () => {
+        const file = pdfInput.files[0];
+        if (!file) {
+          alert('Please select a PDF file.');
+          return;
+        }
+
+        const pdfData = await file.arrayBuffer();
+        const pdfDoc = await pdfjsLib.getDocument({ data: pdfData }).promise;
+
+        const startPage = 1; // Start page number
+        const endPage = pdfDoc.numPages; // End page number (all pages)
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const scale = 2; // Adjust scale as needed
+        let currentY = 0;
+
+        const pageWidth = await pdfDoc.getPage(startPage).then(page => page.getViewport({ scale }).width);
+        let totalHeight = 0;
+
+        for (let pageNum = startPage; pageNum <= endPage; pageNum++) {
+          const page = await pdfDoc.getPage(pageNum);
+          const viewport = page.getViewport({ scale });
+          totalHeight += viewport.height;
+        }
+
+        canvas.width = pageWidth;
+        canvas.height = totalHeight;
+
+        for (let pageNum = startPage; pageNum <= endPage; pageNum++) {
+          const page = await pdfDoc.getPage(pageNum);
+          const viewport = page.getViewport({ scale });
+          const canvasPage = document.createElement('canvas');
+          const ctxPage = canvasPage.getContext('2d');
+          canvasPage.width = viewport.width;
+          canvasPage.height = viewport.height;
+          await page.render({ canvasContext: ctxPage, viewport }).promise;
+          ctx.drawImage(canvasPage, 0, currentY);
+          currentY += viewport.height;
+        }
+
+        // Convert the canvas to a data URL
+        const pngDataUrl = canvas.toDataURL('image/png');
+
+        // Create a download link for the PNG image
+        const downloadLink = document.createElement('a');
+        downloadLink.href = pngDataUrl;
+        downloadLink.download = 'stacked_pages.png';
+        downloadLink.click();
+      });
+    });
+  </script>
+</body>
+</html>

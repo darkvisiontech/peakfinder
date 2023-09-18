@@ -1,0 +1,630 @@
+/*
+	WebPlotDigitizer - https://automeris.io/WebPlotDigitizer
+
+	Copyright 2010-2021 Ankit Rohatgi <ankitrohatgi@hotmail.com>
+
+	This file is part of WebPlotDigitizer.
+
+    WebPlotDigitizer is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    WebPlotDigitizer is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with WebPlotDigitizer.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* Defining CSS variables for light and dark themes */
+:root {
+    --background-light: white;
+    --background-dark: #333333;
+    --text-light: #333333;
+    --text-dark: #f4f4f4;
+}
+
+/* Light theme */
+.light {
+    --btn-bg-color: #f1f1f1;
+    --btn-text-color: #333333;
+    --btn-hover-color: #FFD8C7;
+    --btn-active-color: #FF9466;
+    background-color: var(--background-light);
+    color: var(--text-light);
+}
+
+/* Dark theme */
+.dark {
+    --btn-bg-color: #242424;
+    --btn-text-color: #f4f4f4;
+    --btn-hover-color: #ff4d00;
+    --btn-active-color: #db4200;
+    background-color: var(--background-dark);
+    color: var(--text-dark);
+}
+
+html {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font: 14px Verdana, sans-serif;
+    line-height: 150%;
+    overflow: hidden;
+}
+
+tr,
+td {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    /* Remove underline */
+}
+
+/* Optionally, you can style visited links in the same way */
+a:visited {
+    color: inherit;
+}
+
+#allContainer {
+    width: 100%;
+    height: 100%;
+    margin-left: 5px;
+}
+
+#mainContainer {
+    float: left;
+}
+
+#topContainer {
+    width: 100%;
+    height: 40px;
+    border-bottom: thin lightgrey solid;
+}
+
+#menuButtonsContainer {
+    padding-top: 4px;
+    padding-left: 5px;
+    padding-right: 5px;
+    display: inline-block;
+}
+
+#topToolbarContainer {
+    display: inline-block;
+}
+
+#graphicsContainer {
+    overflow: auto;
+    display: inline-block;
+}
+
+#sidebarContainer {
+    float: right;
+    width: 270px;
+    height: 100%;
+}
+
+#bottomContainer {
+    width: 100%;
+    height: 40px;
+    border-top: thin lightgrey solid;
+}
+
+#canvasDiv {
+    height: 400px;
+    /* temporary */
+    width: 600px;
+    /* temporary */
+    background-color: var(--background-color);
+    padding: 0;
+    margin: 0;
+}
+
+#mainCanvas {
+    background-color: var(--background-color);
+}
+
+#canvasDiv:hover {
+    cursor: crosshair;
+}
+
+.canvasLayers {
+    background-color: transparent;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.zoomLayers {
+    border: thin grey solid;
+    margin: 0;
+    padding: 0;
+}
+
+#zoomDiv {
+    margin: 0px;
+    margin-bottom: 5px;
+    padding: 0px;
+    width: 251px;
+    text-align: center;
+}
+
+#cursorPosition {
+    padding: 0px 0px;
+    margin: 0;
+    margin-top: -5px;
+    background-color: var(--background-color);
+    width: 250px;
+    top: 0px;
+    font-size: 12px;
+    text-align: center;
+}
+
+select {
+    font-size: 13px;
+    color: var(--btn-text-color);
+    background-color: var(--btn-bg-color);
+    font-family: Verdana, sans-serif;
+    border: thin grey solid;
+}
+
+option:checked {
+    background-color: var(--btn-active-color);
+}
+
+.standardToolbar {
+    height: 25px;
+    padding: 0 0px;
+    margin: 0 0px;
+}
+
+.toolbar {
+    padding: 0 10px;
+    margin: 0;
+    height: 25px;
+    position: absolute;
+    top: -15px;
+    left: 5px;
+    visibility: hidden;
+    z-index: 4;
+}
+
+.toolbar p {
+    padding: 0;
+    margin: 0;
+}
+
+.popupheading {
+    font-size: 14px;
+    text-align: left;
+    cursor: move;
+    background-color: rgb(255, 94, 0);
+    color: black;
+    margin: 0 -5px 0 -5px;
+    padding: 5px;
+}
+
+.popup {
+    padding: 0px 5px 12px 5px;
+    margin: 0;
+    border: thin #444444 solid;
+    background-color: var(--background-color);
+    z-index: 100;
+    position: absolute;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+}
+
+.popup p {
+    padding: 0;
+    margin: 5px 5px;
+}
+
+.popup-drag-mask {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: none;
+    z-index: 5000;
+    display: none;
+}
+
+.sidebar-title {
+    background-color: #ddd;
+    color: black;
+    padding: 2px;
+}
+
+.sidebar {
+    padding: 0px 0px;
+    margin: 0;
+    background-color: var(--background-color);
+    width: 250px;
+    display: none;
+    font-size: 13px;
+    overflow: auto;
+}
+
+.sidebar p {
+    padding: 1px 0px 1px 1px;
+    margin: 2px 1px 2px 1px;
+    font-size: 13px;
+}
+
+.footnote {
+    font-size: 10px;
+}
+
+.leftIndent {
+    margin-left: 10px;
+}
+
+#zoom-settings-container {
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    z-index: 3;
+}
+
+#zoom-settings-button {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    padding: 0px;
+}
+
+.colorOptionBox {
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    border: thin black solid;
+    margin-left: 5px;
+}
+
+.largeColorBox {
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    border: thin black solid;
+}
+
+#wait {
+    position: absolute;
+    top: 0px;
+    left: 300px;
+    background: #666666;
+    color: lightgreen;
+    width: 200px;
+    margin: 0px;
+    display: inline-block;
+    padding: 0px;
+    z-index: 100;
+}
+
+#wait p {
+    margin: 3px;
+    padding: 0px;
+}
+
+.i18n-string {
+    display: none;
+}
+
+.sidebar-extras {
+    border: thin lightgray solid;
+    padding-top: 5px;
+    display: none;
+}
+
+#bottomNavbarContainer {
+    height: 100%;
+}
+
+#imageAndPageNavbar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#imageAndPageNavbar .paged {
+    margin-left: 10px;
+}
+
+#imageAndPageNavbar .files {
+    margin-left: 10px;
+}
+
+#navSeparator {
+    height: 100%;
+    margin: 0px 10px 0px 20px;
+    border-left: thin lightgray solid;
+}
+
+label {
+    vertical-align: top;
+}
+
+
+/* Generic Menus */
+
+.wpd-menu {
+    font-size: 14px;
+    display: inline-block;
+    position: relative;
+    cursor: default;
+}
+
+.wpd-menu:hover>.wpd-menu-dropdown {
+    visibility: visible;
+    z-index: 50;
+}
+
+.wpd-menu:hover>.wpd-menu-header,
+.wpd-menu-dropdown>ul>li:hover {
+    background-color: var(--btn-active-color);
+}
+
+.wpd-menu-dropdown>ul>li:active {
+    background-color: var(--btn-active-color);
+}
+
+.wpd-menu-header {
+    position: relative;
+    padding: 5px;
+    height: 18px;
+}
+
+.wpd-menu-dropdown {
+    visibility: hidden;
+    display: inline-block;
+    position: absolute;
+    background-color: var(--background-color);
+    padding: 0px;
+}
+
+.wpd-menu-dropdown>ul {
+    list-style: none;
+    list-style-type: none;
+    padding: 1px;
+    margin: 0px;
+    white-space: nowrap;
+    border: thin #ccc solid;
+}
+
+.wpd-menu-dropdown>ul>li {
+    padding: 3px 8px 3px 8px;
+}
+
+.wpd-disabled-menu-item {
+    color: grey;
+}
+
+
+textarea {
+    resize: none;
+}
+
+input[type="button"],
+button {
+    padding: 2px 3px 2px 3px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--btn-text-color);
+    background-color: var(--btn-bg-color);
+    border: thin #bbbbbb solid;
+    height: 22px;
+    margin: 0px;
+}
+
+input[type="button"]:hover,
+button:hover {
+    background-color: var(--btn-hover-color);
+    border: thin black solid;
+}
+
+input[type="button"]:active,
+button:active {
+    background-color: var(--btn-active-color);
+}
+
+input[type="button"].pressed-button,
+button.pressed-button {
+    background-color: var(--btn-active-color);
+}
+
+input[type="button"]:focus,
+button:focus {
+    outline-width: 0;
+}
+
+input[type="button"]:disabled {
+    color: grey;
+}
+
+/* Sort of a hack to make button look right in Firefox */
+input[type="button"]::-moz-focus-inner {
+    margin-top: -1px;
+}
+
+input[type="checkbox"] {
+    height: 20px;
+    width: 20px;
+    border: thin black solid;
+    background-color: var(--background-color);
+}
+
+input[type="text"] {
+    font-family: Verdana, Sans Serif;
+    font-size: 13px;
+    color: var(--btn-text-color);
+    background-color: var(--background-color);
+    border: thin #aaaaaa solid;
+    height: 17px;
+}
+
+/*********** Baseline, reset styles ***********/
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+/* Removes default focus */
+input[type="range"]:focus {
+    outline: none;
+}
+
+/******** Chrome, Safari, Opera and Edge Chromium styles ********/
+/* slider track */
+input[type="range"]::-webkit-slider-runnable-track {
+    background-color: #000000;
+    border-radius: 0.5rem;
+    height: 0.5rem;
+}
+
+/* slider thumb */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    /* Override default look */
+    appearance: none;
+    margin-top: -4px;
+    /* Centers thumb on the track */
+    background-color: var(--btn-active-color);
+    border-radius: 0.5rem;
+    height: 1rem;
+    width: 1rem;
+}
+
+input[type="range"]:focus::-webkit-slider-thumb {
+    outline: 3px solid var(--btn-active-color);
+    outline-offset: 0.125rem;
+}
+
+/*********** Firefox styles ***********/
+/* slider track */
+input[type="range"]::-moz-range-track {
+    background-color: #000000;
+    border-radius: 0.5rem;
+    height: 0.5rem;
+}
+
+/* slider thumb */
+input[type="range"]::-moz-range-thumb {
+    background-color: var(--btn-active-color);
+    border: none;
+    /*Removes extra border that FF applies*/
+    border-radius: 0.5rem;
+    height: 1rem;
+    width: 1rem;
+}
+
+input[type="range"]:focus::-moz-range-thumb {
+    outline: 3px solid var(--btn-active-color);
+    outline-offset: 0.125rem;
+}
+
+input[type="file"] {
+    font-size: 14px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+hr {
+    height: 1px;
+    border: none;
+    background-color: #dddddd;
+}
+
+select {
+    border: none;
+}
+
+.tree-item {
+    cursor: pointer;
+    padding: 2px;
+    margin-bottom: 20px;
+}
+
+.tree-folder {
+    cursor: pointer;
+    padding: 2px;
+}
+
+.tree-list {
+    list-style: none;
+    padding-left: 15px;
+    font-family: sans-serif;
+    font-size: 11pt;
+}
+
+.tree-list-root {
+    list-style: none;
+    padding-left: 1px;
+    font-family: sans-serif;
+    font-size: 11pt;
+    margin-top: 10px;
+}
+
+.tree-item:hover,
+.tree-folder:hover {
+    background-color: var(--btn-hover-color);
+}
+
+.tree-selected {
+    background-color: var(--btn-active-color);
+}
+
+.tree-selected:hover {
+    background-color: var(--btn-hover-color);
+}
+
+.tree-item:active,
+.tree-folder:active,
+.tree-item::selection {
+    background-color: var(--btn-active-color);
+}
+
+.tree-widget {
+    display: none;
+    font-size: 13px;
+}
+
+.tree-widget p {
+    margin: 5px 0px 5px 0px;
+}
+
+.tree-item-icon {
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    display: inline-block;
+    margin-right: 3px;
+}
