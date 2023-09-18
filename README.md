@@ -8,7 +8,7 @@ A peak detection capable variant of the award winning WPD tool to extract numeri
 
 Online Version:
 -------
-https://softypo.github.io/WPDPeakFinder/
+https://darkvisiontech.github.io/peakfinder/
 
 Standalone Version:
 -------
