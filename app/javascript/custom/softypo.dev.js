@@ -1134,7 +1134,7 @@
     let middle = 0;
     let currentLow = 0;
     let currentHigh = 0;
-    let median = calcMiddle(low, high);
+    const median = calcMiddle(low, high);
     while (true) {
       if (high <= low) {
         return array[median];
@@ -1241,7 +1241,8 @@
 
   // node_modules/ml-spectra-processing/lib-esm/x/xGetFromToIndex.js
   function xGetFromToIndex(x2, options = {}) {
-    let { fromIndex, toIndex, from, to } = options;
+    let { fromIndex, toIndex } = options;
+    const { from, to } = options;
     if (fromIndex === void 0) {
       if (from !== void 0) {
         fromIndex = xFindClosestIndex(x2, from);
@@ -1303,7 +1304,7 @@
     let maxDx = 0;
     let minDx = Number.MAX_SAFE_INTEGER;
     for (let i2 = 0; i2 < array.length - 1; ++i2) {
-      let absoluteDifference = array[i2 + 1] - array[i2];
+      const absoluteDifference = array[i2 + 1] - array[i2];
       if (absoluteDifference < minDx) {
         minDx = absoluteDifference;
       }
