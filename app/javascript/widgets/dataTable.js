@@ -364,7 +364,7 @@ wpd.dataTable = (function () {
         $digitizedDataTable.focus();
         $digitizedDataTable.select();
         try {
-            !navigator.clipboard ? document.execCommand('copy') : navigator.clipboard.writeText(text_to_copy);
+            !navigator.clipboard ? document.execCommand('copy') : navigator.clipboard.writeText($digitizedDataTable.value);
         } catch (ex) {
             console.log('copyToClipboard', ex.message);
         }
