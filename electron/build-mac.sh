@@ -9,7 +9,7 @@ echo "Packaging..."
 APPNAME=WPDPeakFinder-4.7-1.1
 
 # mac
-electron-packager ./electron $APPNAME --platform=darwin --icon=app/images/icon/wpd.icns --arch=x64 --overwrite
+electron-packager ./electron $APPNAME --platform=darwin --icon=app/icon/wpd.icns --arch=x64 --overwrite
 rsync -av --progress ./app/website $APPNAME-darwin-x64/$APPNAME.app/Contents/Resources/ --exclude node_modules --exclude package.json --exclude package-lock.json
 zip -r $APPNAME-darwin-x64.zip $APPNAME-darwin-x64
 md5 $APPNAME-darwin-x64.zip > $APPNAME-darwin-x64.zip.md5

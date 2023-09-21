@@ -21,7 +21,7 @@
 
 var wpd = wpd || {};
 
-wpd.initApp = function () { // This is run when the page loads.
+wpd.initApp = function() { // This is run when the page loads.
     wpd.browserInfo.checkBrowser();
     wpd.layoutManager.initialLayout();
     wpd.handleLaunchArgs();
@@ -30,10 +30,10 @@ wpd.initApp = function () { // This is run when the page loads.
 
 };
 
-wpd.loadDefaultImage = function () {
+wpd.loadDefaultImage = function() {
     // Need to initialize file manager alongside loading image.
     // TODO: clean up file manager initialization!
-    let loadImage = async function () {
+    let loadImage = async function() {
         let response = await fetch("start.png");
         let data = await response.blob();
         let metadata = {
@@ -46,19 +46,19 @@ wpd.loadDefaultImage = function () {
     loadImage();
 }
 
-wpd.handleLaunchArgs = function () {
+wpd.handleLaunchArgs = function() {
     // fetch a project with specific ID from the backend if a projectid argument is provided:
     let projectid = wpd.args.getValue("projectid");
     if (projectid == null) {
         wpd.loadDefaultImage();
     } else {
-        fetch("storage/project/" + projectid + ".tar").then(function (response) {
+        fetch("storage/project/" + projectid + ".tar").then(function(response) {
             if (response.ok) {
                 return response.blob();
             } else {
                 throw new Error("Can not open project file with ID: " + projectid);
             }
-        }).then(function (blob) {
+        }).then(function(blob) {
             wpd.saveResume.readProjectFile(blob);
         }).catch((err) => {
             wpd.messagePopup.show(wpd.gettext("invalid-project"), err);
@@ -613,8 +613,8 @@ wpd.Color = class {
 
 var wpd = wpd || {};
 
-wpd.ColorGroup = (function () {
-    var CGroup = function (tolerance) {
+wpd.ColorGroup = (function() {
+    var CGroup = function(tolerance) {
         var totalPixelCount = 0,
             averageColor = {
                 r: 0,
@@ -624,15 +624,15 @@ wpd.ColorGroup = (function () {
 
         tolerance = tolerance == null ? 100 : tolerance;
 
-        this.getPixelCount = function () {
+        this.getPixelCount = function() {
             return totalPixelCount;
         };
 
-        this.getAverageColor = function () {
+        this.getAverageColor = function() {
             return averageColor;
         };
 
-        this.isColorInGroup = function (r, g, b) {
+        this.isColorInGroup = function(r, g, b) {
             if (totalPixelCount === 0) {
                 return true;
             }
@@ -644,7 +644,7 @@ wpd.ColorGroup = (function () {
             return (dist <= tolerance * tolerance);
         };
 
-        this.addPixel = function (r, g, b) {
+        this.addPixel = function(r, g, b) {
             averageColor.r = (averageColor.r * totalPixelCount + r) / (totalPixelCount + 1.0);
             averageColor.g = (averageColor.g * totalPixelCount + g) / (totalPixelCount + 1.0);
             averageColor.b = (averageColor.b * totalPixelCount + b) / (totalPixelCount + 1.0);
@@ -654,7 +654,7 @@ wpd.ColorGroup = (function () {
     return CGroup;
 })();
 
-wpd.colorAnalyzer = (function () {
+wpd.colorAnalyzer = (function() {
     function getTopColors(imageData) {
 
         var colorGroupColl = [], // collection of color groups
@@ -691,7 +691,7 @@ wpd.colorAnalyzer = (function () {
         }
 
         // sort groups
-        colorGroupColl.sort(function (a, b) {
+        colorGroupColl.sort(function(a, b) {
             if (a.getPixelCount() > b.getPixelCount()) {
                 return -1;
             } else if (a.getPixelCount() < b.getPixelCount()) {
@@ -880,7 +880,7 @@ wpd.AngleMeasurement = class extends wpd.ConnectedPoints {
         if (index < this._connections.length && this._connectivity === 3) {
 
             var ang1 = wpd.taninverse(-(this._connections[index][5] - this._connections[index][3]),
-                this._connections[index][4] - this._connections[index][2]),
+                    this._connections[index][4] - this._connections[index][2]),
                 ang2 = wpd.taninverse(-(this._connections[index][1] - this._connections[index][3]),
                     this._connections[index][0] - this._connections[index][2]),
                 ang = ang1 - ang2;
@@ -973,7 +973,7 @@ wpd.AreaMeasurement = class extends wpd.ConnectedPoints {
 
 var wpd = wpd || {};
 
-wpd.plotDataProvider = (function () {
+wpd.plotDataProvider = (function() {
     let _ds = null;
 
     function setDataSource(ds) {
@@ -1245,7 +1245,7 @@ wpd.plotDataProvider = (function () {
     };
 })();
 
-wpd.measurementDataProvider = (function () {
+wpd.measurementDataProvider = (function() {
     let _ms = null;
 
     function setDataSource(ms) {
@@ -1729,7 +1729,7 @@ wpd.Dataset = class {
 /* Parse dates and convert back and forth to Julian days */
 var wpd = wpd || {};
 
-wpd.dateConverter = (function () {
+wpd.dateConverter = (function() {
     function parse(input) {
         if (input == null) {
             return null;
@@ -1938,7 +1938,7 @@ wpd.dateConverter = (function () {
 
 var wpd = wpd || {};
 
-wpd.gridDetectionCore = (function () {
+wpd.gridDetectionCore = (function() {
     var hasHorizontal, hasVertical, xFrac = 0.1,
         yFrac = 0.1;
 
@@ -2113,7 +2113,7 @@ wpd.InputParser = class {
  */
 var wpd = wpd || {};
 
-wpd.taninverse = function (y, x) {
+wpd.taninverse = function(y, x) {
     var inv_ans;
     if (y > 0) // I & II
         inv_ans = Math.atan2(y, x);
@@ -2125,26 +2125,26 @@ wpd.taninverse = function (y, x) {
     return inv_ans;
 };
 
-wpd.sqDist2d = function (x1, y1, x2, y2) {
+wpd.sqDist2d = function(x1, y1, x2, y2) {
     return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
 };
 
-wpd.sqDist3d = function (
+wpd.sqDist3d = function(
     x1, y1, z1, x2, y2,
     z2) {
     return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) + (z1 - z2) * (z1 - z2);
 };
 
-wpd.dist2d = function (x1, y1, x2, y2) {
+wpd.dist2d = function(x1, y1, x2, y2) {
     return Math.sqrt(wpd.sqDist2d(x1, y1, x2, y2));
 };
 
-wpd.dist3d = function (x1, y1, z1, x2, y2,
+wpd.dist3d = function(x1, y1, z1, x2, y2,
     z2) {
     return Math.sqrt(wpd.sqDist3d(x1, y1, z1, x2, y2, z2));
 };
 
-wpd.mat = (function () {
+wpd.mat = (function() {
     function det2x2(m) {
         return m[0] * m[3] - m[1] * m[2];
     }
@@ -2179,7 +2179,7 @@ wpd.mat = (function () {
 })();
 
 wpd.cspline =
-    function (x, y) {
+    function(x, y) {
         var len = x.length,
             cs = {
                 x: x,
@@ -2217,7 +2217,7 @@ wpd.cspline =
     };
 
 wpd.cspline_interp =
-    function (cs, x) {
+    function(cs, x) {
         var i = 0,
             t, a, b, c, d;
         if (x >= cs.x[cs.len - 1] || x < cs.x[0]) {
@@ -2240,7 +2240,7 @@ wpd.cspline_interp =
 
 
 // Get circle center and radius from three 2D points
-wpd.getCircleFrom3Pts = function (pts) {
+wpd.getCircleFrom3Pts = function(pts) {
     let Ax = pts[0][0];
     let Bx = pts[1][0];
     let Cx = pts[2][0];
@@ -2266,7 +2266,7 @@ wpd.getCircleFrom3Pts = function (pts) {
     };
 };
 
-wpd.normalizeAngleDeg = function (angleDeg) {
+wpd.normalizeAngleDeg = function(angleDeg) {
     let normDeg = angleDeg % 360;
     if (normDeg < 0) {
         normDeg += 360.0;
@@ -3021,7 +3021,7 @@ var wpd = wpd || {};
 wpd.rle = {};
 
 // wpd.rle.encode - Encode a sorted array of integers
-wpd.rle.encode = function (sortedArray) {
+wpd.rle.encode = function(sortedArray) {
     // return an array as [[pos, count], [pos, count], ... ]
     let ret = [];
     let prevVal = null;
@@ -3046,7 +3046,7 @@ wpd.rle.encode = function (sortedArray) {
 };
 
 // wpd.rle.decode - Decode RLE array with data as [[pos, count], [pos, count], ... ] etc.
-wpd.rle.decode = function (rleArray) {
+wpd.rle.decode = function(rleArray) {
     let ret = [];
     for (let item of rleArray) {
         let val = item[0];
@@ -3108,10 +3108,10 @@ wpd.AveragingWindowAlgo = class {
 
     serialize() {
         return this._wasRun ? {
-            algoType: "AveragingWindowAlgo",
-            xStep: this._xStep,
-            yStep: this._yStep
-        } :
+                algoType: "AveragingWindowAlgo",
+                xStep: this._xStep,
+                yStep: this._yStep
+            } :
             null;
     }
 
@@ -3336,14 +3336,14 @@ wpd.AveragingWindowWithStepSizeAlgo = class {
 
     serialize() {
         return this._wasRun ? {
-            algoType: "AveragingWindowWithStepSizeAlgo",
-            xmin: this._xmin,
-            delx: this._delx,
-            xmax: this._xmax,
-            ymin: this._ymin,
-            ymax: this._ymax,
-            lineWidth: this._lineWidth
-        } :
+                algoType: "AveragingWindowWithStepSizeAlgo",
+                xmin: this._xmin,
+                delx: this._delx,
+                xmax: this._xmax,
+                ymin: this._ymin,
+                ymax: this._ymax,
+                lineWidth: this._lineWidth
+            } :
             null;
     }
 
@@ -3400,7 +3400,7 @@ wpd.AveragingWindowWithStepSizeAlgo = class {
 
                 if (xi_pix >= 0 && xi_pix < dw && yi_pix >= 0 && yi_pix < dh) {
                     if (autoDetector.binaryData.has(parseInt(yi_pix, 10) * dw +
-                        parseInt(xi_pix, 10))) {
+                            parseInt(xi_pix, 10))) {
                         if (blobActive === false) {
                             blobEntry = ii;
                             blobExit = blobEntry;
@@ -3531,10 +3531,10 @@ wpd.BarExtractionAlgo = class {
 
     serialize() {
         return this._wasRun ? {
-            algoType: "BarExtractionAlgo",
-            delX: this._delX,
-            delVal: this._delVal
-        } :
+                algoType: "BarExtractionAlgo",
+                delX: this._delX,
+                delVal: this._delVal
+            } :
             null;
     }
 
@@ -3554,7 +3554,7 @@ wpd.BarExtractionAlgo = class {
             pixelAdded,
             barValuei, bv, dataVal, pxVal, mkeys, topVal, botVal,
 
-            appendData = function (x, valTop, valBot, delX, delVal) {
+            appendData = function(x, valTop, valBot, delX, delVal) {
                 pixelAdded = false;
                 for (barValuei = 0; barValuei < barValueColl.length; barValuei++) {
                     bv = barValueColl[barValuei];
@@ -3721,10 +3721,10 @@ wpd.BlobDetectorAlgo = class {
 
     serialize() {
         return this._wasRun ? {
-            algoType: "BlobDetectorAlgo",
-            minDia: this._minDia,
-            maxDia: this._maxDia
-        } :
+                algoType: "BlobDetectorAlgo",
+                minDia: this._minDia,
+                maxDia: this._maxDia
+            } :
             null;
     }
 
@@ -3999,7 +3999,7 @@ wpd.CustomIndependents = class {
                 let px = axes.dataToPixel(isLogX ? (logXFactor * Math.pow(10, xi)) : xi, isLogY ? (logYFactor * Math.pow(10, yi)) : yi);
                 if (px.x >= 0 && px.y >= 0 && px.x < imageWidth && px.y < imageHeight) {
                     if (autoDetector.binaryData.has(parseInt(px.y, 10) * imageWidth +
-                        parseInt(px.x, 10))) {
+                            parseInt(px.x, 10))) {
                         mean_yi += yi;
                         y_count++;
                     }
@@ -4146,14 +4146,14 @@ wpd.XStepWithInterpolationAlgo = class {
 
     serialize() {
         return this._wasRun ? {
-            algoType: "XStepWithInterpolationAlgo",
-            xmin: this._xmin,
-            delx: this._delx,
-            xmax: this._xmax,
-            ymin: this._ymin,
-            ymax: this._ymax,
-            smoothing: this._smoothing
-        } :
+                algoType: "XStepWithInterpolationAlgo",
+                xmin: this._xmin,
+                delx: this._delx,
+                xmax: this._xmax,
+                ymin: this._ymin,
+                ymax: this._ymax,
+                smoothing: this._smoothing
+            } :
             null;
     }
 
@@ -4237,7 +4237,7 @@ wpd.XStepWithInterpolationAlgo = class {
                     isLogY ? logYFactor * Math.pow(10, yi) : yi);
                 if (pdata.x >= 0 && pdata.y >= 0 && pdata.x < dw && pdata.y < dh) {
                     if (autoDetector.binaryData.has(parseInt(pdata.y, 10) * dw +
-                        parseInt(pdata.x, 10))) {
+                            parseInt(pdata.x, 10))) {
                         mean_yi = (mean_yi * y_count + yi) / (parseFloat(y_count + 1));
                         y_count++;
                     }
@@ -4356,8 +4356,8 @@ wpd.XStepWithInterpolationAlgo = class {
 
 var wpd = wpd || {};
 
-wpd.BarAxes = (function () {
-    var AxesObj = function () {
+wpd.BarAxes = (function() {
+    var AxesObj = function() {
         // Throughout this code, it is assumed that "y" is the continuous axes and "x" is
         // the discrete axes. In practice, this shouldn't matter even if the orientation
         // is different.
@@ -4368,13 +4368,13 @@ wpd.BarAxes = (function () {
             x1, y1, x2, y2, p1, p2,
             orientation;
 
-        this.isCalibrated = function () {
+        this.isCalibrated = function() {
             return isCalibrated;
         };
 
         this.calibration = null;
 
-        this.calibrate = function (calibration, isLog, isRotated) {
+        this.calibrate = function(calibration, isLog, isRotated) {
             this.calibration = calibration;
             isCalibrated = false;
             var cp1 = calibration.getPoint(0),
@@ -4413,10 +4413,10 @@ wpd.BarAxes = (function () {
             return true;
         };
 
-        this.pixelToData = function (pxi, pyi) {
+        this.pixelToData = function(pxi, pyi) {
             var data = [],
                 c_c2 = ((pyi - y1) * (y2 - y1) + (x2 - x1) * (pxi - x1)) /
-                    ((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
+                ((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
             // We could return X pixel value (or Y, depending on orientation) but that's not very
             // useful. For now, just return the bar value. That's it.
             data[0] = (p2 - p1) * c_c2 + p1;
@@ -4426,7 +4426,7 @@ wpd.BarAxes = (function () {
             return data;
         };
 
-        this.dataToPixel = function (x, y) {
+        this.dataToPixel = function(x, y) {
             // not implemented yet
             return {
                 x: 0,
@@ -4434,16 +4434,16 @@ wpd.BarAxes = (function () {
             };
         };
 
-        this.pixelToLiveString = function (pxi, pyi) {
+        this.pixelToLiveString = function(pxi, pyi) {
             var dataVal = this.pixelToData(pxi, pyi);
             return dataVal[0].toExponential(4);
         };
 
-        this.isLog = function () {
+        this.isLog = function() {
             return isLogScale;
         };
 
-        this.isRotated = function () {
+        this.isRotated = function() {
             return isRotatedAxes;
         }
 
@@ -4451,7 +4451,7 @@ wpd.BarAxes = (function () {
 
         this.dataPointsLabelPrefix = 'Bar';
 
-        this.calculateOrientation = function () { // Used by auto-extract algo to switch orientation.
+        this.calculateOrientation = function() { // Used by auto-extract algo to switch orientation.
             var orientationAngle = wpd.taninverse(-(y2 - y1), x2 - x1) * 180 / Math.PI,
                 orientation = {
                     axes: 'Y',
@@ -4479,16 +4479,16 @@ wpd.BarAxes = (function () {
 
         };
 
-        this.getOrientation = function () {
+        this.getOrientation = function() {
             return orientation;
         };
 
-        this.getMetadata = function () {
+        this.getMetadata = function() {
             // deep clone
             return JSON.parse(JSON.stringify(metadata));
         };
 
-        this.setMetadata = function (obj) {
+        this.setMetadata = function(obj) {
             // deep clone
             metadata = JSON.parse(JSON.stringify(obj));
         };
@@ -4496,15 +4496,15 @@ wpd.BarAxes = (function () {
         this.name = "Bar";
     };
 
-    AxesObj.prototype.numCalibrationPointsRequired = function () {
+    AxesObj.prototype.numCalibrationPointsRequired = function() {
         return 2;
     };
 
-    AxesObj.prototype.getDimensions = function () {
+    AxesObj.prototype.getDimensions = function() {
         return 2;
     };
 
-    AxesObj.prototype.getAxesLabels = function () {
+    AxesObj.prototype.getAxesLabels = function() {
         return ['Label', 'Y'];
     };
 
@@ -4728,41 +4728,41 @@ wpd.CircularChartRecorderAxes = class {
 
 var wpd = wpd || {};
 
-wpd.ImageAxes = (function () {
-    var AxesObj = function () {
+wpd.ImageAxes = (function() {
+    var AxesObj = function() {
         let metadata = {};
 
-        this.isCalibrated = function () {
+        this.isCalibrated = function() {
             return true;
         };
 
-        this.calibrate = function () {
+        this.calibrate = function() {
             return true;
         };
 
-        this.pixelToData = function (pxi, pyi) {
+        this.pixelToData = function(pxi, pyi) {
             var data = [pxi, pyi];
             return data;
         };
 
-        this.dataToPixel = function (x, y) {
+        this.dataToPixel = function(x, y) {
             return {
                 x: x,
                 y: y
             };
         };
 
-        this.pixelToLiveString = function (pxi, pyi) {
+        this.pixelToLiveString = function(pxi, pyi) {
             var dataVal = this.pixelToData(pxi, pyi);
             return dataVal[0].toFixed(2) + ', ' + dataVal[1].toFixed(2);
         };
 
-        this.getMetadata = function () {
+        this.getMetadata = function() {
             // deep clone
             return JSON.parse(JSON.stringify(metadata));
         };
 
-        this.setMetadata = function (obj) {
+        this.setMetadata = function(obj) {
             // deep clone
             metadata = JSON.parse(JSON.stringify(obj));
         };
@@ -4770,15 +4770,15 @@ wpd.ImageAxes = (function () {
         this.name = "Image";
     };
 
-    AxesObj.prototype.numCalibrationPointsRequired = function () {
+    AxesObj.prototype.numCalibrationPointsRequired = function() {
         return 0;
     };
 
-    AxesObj.prototype.getDimensions = function () {
+    AxesObj.prototype.getDimensions = function() {
         return 2;
     };
 
-    AxesObj.prototype.getAxesLabels = function () {
+    AxesObj.prototype.getAxesLabels = function() {
         return ['X', 'Y'];
     };
 
@@ -4806,15 +4806,15 @@ wpd.ImageAxes = (function () {
 
 var wpd = wpd || {};
 
-wpd.MapAxes = (function () {
-    var AxesObj = function () {
+wpd.MapAxes = (function() {
+    var AxesObj = function() {
         var isCalibrated = false,
 
             metadata = {},
 
             scaleLength, scaleUnits, dist, originLocation, imageHeight,
 
-            processCalibration = function (cal, scale_length, scale_units, origin_location, image_height) {
+            processCalibration = function(cal, scale_length, scale_units, origin_location, image_height) {
                 var cp0 = cal.getPoint(0),
                     cp1 = cal.getPoint(1);
                 dist = Math.sqrt((cp0.px - cp1.px) * (cp0.px - cp1.px) +
@@ -4828,17 +4828,17 @@ wpd.MapAxes = (function () {
 
         this.calibration = null;
 
-        this.isCalibrated = function () {
+        this.isCalibrated = function() {
             return isCalibrated;
         };
 
-        this.calibrate = function (calib, scale_length, scale_units, origin_location, image_height) {
+        this.calibrate = function(calib, scale_length, scale_units, origin_location, image_height) {
             this.calibration = calib;
             isCalibrated = processCalibration(calib, scale_length, scale_units, origin_location, image_height);
             return isCalibrated;
         };
 
-        this.pixelToData = function (pxi, pyi) {
+        this.pixelToData = function(pxi, pyi) {
             var data = [];
             data[0] = pxi * scaleLength / dist;
             if (originLocation === "top-left") {
@@ -4849,49 +4849,49 @@ wpd.MapAxes = (function () {
             return data;
         };
 
-        this.pixelToDataDistance = function (distancePx) {
+        this.pixelToDataDistance = function(distancePx) {
             return distancePx * scaleLength / dist;
         };
 
-        this.pixelToDataArea = function (
+        this.pixelToDataArea = function(
             areaPx) {
             return areaPx * scaleLength * scaleLength / (dist * dist);
         };
 
-        this.dataToPixel = function (a, b, c) {
+        this.dataToPixel = function(a, b, c) {
             return {
                 x: 0,
                 y: 0
             };
         };
 
-        this.pixelToLiveString = function (pxi, pyi) {
+        this.pixelToLiveString = function(pxi, pyi) {
             var dataVal = this.pixelToData(pxi, pyi);
             return dataVal[0].toExponential(4) + ', ' + dataVal[1].toExponential(4);
         };
 
-        this.getScaleLength = function () {
+        this.getScaleLength = function() {
             return scaleLength;
         };
 
-        this.getUnits = function () {
+        this.getUnits = function() {
             return scaleUnits;
         };
 
-        this.getOriginLocation = function () {
+        this.getOriginLocation = function() {
             return originLocation;
         };
 
-        this.getImageHeight = function () {
+        this.getImageHeight = function() {
             return imageHeight;
         };
 
-        this.getMetadata = function () {
+        this.getMetadata = function() {
             // deep clone
             return JSON.parse(JSON.stringify(metadata));
         };
 
-        this.setMetadata = function (obj) {
+        this.setMetadata = function(obj) {
             // deep clone
             metadata = JSON.parse(JSON.stringify(obj));
         };
@@ -4899,15 +4899,15 @@ wpd.MapAxes = (function () {
         this.name = "Map";
     };
 
-    AxesObj.prototype.numCalibrationPointsRequired = function () {
+    AxesObj.prototype.numCalibrationPointsRequired = function() {
         return 2;
     };
 
-    AxesObj.prototype.getDimensions = function () {
+    AxesObj.prototype.getDimensions = function() {
         return 2;
     };
 
-    AxesObj.prototype.getAxesLabels = function () {
+    AxesObj.prototype.getAxesLabels = function() {
         return ['X', 'Y'];
     };
 
@@ -4935,8 +4935,8 @@ wpd.MapAxes = (function () {
 
 var wpd = wpd || {};
 
-wpd.PolarAxes = (function () {
-    var AxesObj = function () {
+wpd.PolarAxes = (function() {
+    var AxesObj = function() {
         var isCalibrated = false,
             isDegrees = false,
             isClockwise = false,
@@ -4946,7 +4946,7 @@ wpd.PolarAxes = (function () {
 
             x0, y0, x1, y1, x2, y2, r1, theta1, r2, theta2, dist10, dist20, dist12, phi0, alpha0;
 
-        let processCalibration = function (cal, is_degrees, is_clockwise, is_log_r) {
+        let processCalibration = function(cal, is_degrees, is_clockwise, is_log_r) {
             var cp0 = cal.getPoint(0),
                 cp1 = cal.getPoint(1),
                 cp2 = cal.getPoint(2);
@@ -4999,29 +4999,29 @@ wpd.PolarAxes = (function () {
 
         this.calibration = null;
 
-        this.isCalibrated = function () {
+        this.isCalibrated = function() {
             return isCalibrated;
         };
 
-        this.calibrate = function (calib, is_degrees, is_clockwise, is_log_r) {
+        this.calibrate = function(calib, is_degrees, is_clockwise, is_log_r) {
             this.calibration = calib;
             isCalibrated = processCalibration(calib, is_degrees, is_clockwise, is_log_r);
             return isCalibrated;
         };
 
-        this.isThetaDegrees = function () {
+        this.isThetaDegrees = function() {
             return isDegrees;
         };
 
-        this.isThetaClockwise = function () {
+        this.isThetaClockwise = function() {
             return isClockwise;
         };
 
-        this.isRadialLog = function () {
+        this.isRadialLog = function() {
             return isLog;
         };
 
-        this.pixelToData = function (pxi, pyi) {
+        this.pixelToData = function(pxi, pyi) {
             var data = [],
                 rp, thetap;
 
@@ -5056,24 +5056,24 @@ wpd.PolarAxes = (function () {
             return data;
         };
 
-        this.dataToPixel = function (r, theta) {
+        this.dataToPixel = function(r, theta) {
             return {
                 x: 0,
                 y: 0
             };
         };
 
-        this.pixelToLiveString = function (pxi, pyi) {
+        this.pixelToLiveString = function(pxi, pyi) {
             var dataVal = this.pixelToData(pxi, pyi);
             return dataVal[0].toExponential(4) + ', ' + dataVal[1].toExponential(4);
         };
 
-        this.getMetadata = function () {
+        this.getMetadata = function() {
             // deep clone
             return JSON.parse(JSON.stringify(metadata));
         };
 
-        this.setMetadata = function (obj) {
+        this.setMetadata = function(obj) {
             // deep clone
             metadata = JSON.parse(JSON.stringify(obj));
         };
@@ -5081,15 +5081,15 @@ wpd.PolarAxes = (function () {
         this.name = "Polar";
     };
 
-    AxesObj.prototype.numCalibrationPointsRequired = function () {
+    AxesObj.prototype.numCalibrationPointsRequired = function() {
         return 3;
     };
 
-    AxesObj.prototype.getDimensions = function () {
+    AxesObj.prototype.getDimensions = function() {
         return 2;
     };
 
-    AxesObj.prototype.getAxesLabels = function () {
+    AxesObj.prototype.getAxesLabels = function() {
         return ['r', 'θ'];
     };
 
@@ -5117,15 +5117,15 @@ wpd.PolarAxes = (function () {
 
 var wpd = wpd || {};
 
-wpd.TernaryAxes = (function () {
-    var AxesObj = function () {
+wpd.TernaryAxes = (function() {
+    var AxesObj = function() {
         var isCalibrated = false,
 
             metadata = {},
 
             x0, y0, x1, y1, x2, y2, L, phi0, root3, isRange0to100, isOrientationNormal,
 
-            processCalibration = function (cal, range100, is_normal) {
+            processCalibration = function(cal, range100, is_normal) {
                 var cp0 = cal.getPoint(0),
                     cp1 = cal.getPoint(1),
                     cp2 = cal.getPoint(2);
@@ -5150,27 +5150,27 @@ wpd.TernaryAxes = (function () {
                 return true;
             };
 
-        this.isCalibrated = function () {
+        this.isCalibrated = function() {
             return isCalibrated;
         };
 
         this.calibration = null;
 
-        this.calibrate = function (calib, range100, is_normal) {
+        this.calibrate = function(calib, range100, is_normal) {
             this.calibration = calib;
             isCalibrated = processCalibration(calib, range100, is_normal);
             return isCalibrated;
         };
 
-        this.isRange100 = function () {
+        this.isRange100 = function() {
             return isRange0to100;
         };
 
-        this.isNormalOrientation = function () {
+        this.isNormalOrientation = function() {
             return isOrientationNormal;
         };
 
-        this.pixelToData = function (pxi, pyi) {
+        this.pixelToData = function(pxi, pyi) {
             var data = [],
                 rp, thetap, xx, yy, ap, bp, cp, bpt;
 
@@ -5208,25 +5208,25 @@ wpd.TernaryAxes = (function () {
             return data;
         };
 
-        this.dataToPixel = function (a, b, c) {
+        this.dataToPixel = function(a, b, c) {
             return {
                 x: 0,
                 y: 0
             };
         };
 
-        this.pixelToLiveString = function (pxi, pyi) {
+        this.pixelToLiveString = function(pxi, pyi) {
             var dataVal = this.pixelToData(pxi, pyi);
             return dataVal[0].toExponential(4) + ', ' + dataVal[1].toExponential(4) + ', ' +
                 dataVal[2].toExponential(4);
         };
 
-        this.getMetadata = function () {
+        this.getMetadata = function() {
             // deep clone
             return JSON.parse(JSON.stringify(metadata));
         };
 
-        this.setMetadata = function (obj) {
+        this.setMetadata = function(obj) {
             // deep clone
             metadata = JSON.parse(JSON.stringify(obj));
         };
@@ -5234,15 +5234,15 @@ wpd.TernaryAxes = (function () {
         this.name = "Ternary";
     };
 
-    AxesObj.prototype.numCalibrationPointsRequired = function () {
+    AxesObj.prototype.numCalibrationPointsRequired = function() {
         return 3;
     };
 
-    AxesObj.prototype.getDimensions = function () {
+    AxesObj.prototype.getDimensions = function() {
         return 3;
     };
 
-    AxesObj.prototype.getAxesLabels = function () {
+    AxesObj.prototype.getAxesLabels = function() {
         return ['a', 'b', 'c'];
     };
 
@@ -5270,8 +5270,8 @@ wpd.TernaryAxes = (function () {
 
 var wpd = wpd || {};
 
-wpd.XYAxes = (function () {
-    var AxesObj = function () {
+wpd.XYAxes = (function() {
+    var AxesObj = function() {
         var calibration, isCalibrated = false,
             isLogScaleX = false,
             isLogScaleY = false,
@@ -5291,7 +5291,7 @@ wpd.XYAxes = (function () {
             a_inv_mat = [0, 0, 0, 0],
             c_vec = [0, 0],
 
-            processCalibration = function (cal, isLogX, isLogY, noRotationCorrection) {
+            processCalibration = function(cal, isLogX, isLogY, noRotationCorrection) {
                 if (cal.getCount() < 4) {
                     return false;
                 }
@@ -5401,7 +5401,7 @@ wpd.XYAxes = (function () {
                 return true;
             };
 
-        this.getBounds = function () {
+        this.getBounds = function() {
             return {
                 x1: isLogScaleX ? Math.pow(10, xmin) : xmin,
                 x2: isLogScaleX ? Math.pow(10, xmax) : xmax,
@@ -5410,19 +5410,19 @@ wpd.XYAxes = (function () {
             };
         };
 
-        this.isCalibrated = function () {
+        this.isCalibrated = function() {
             return isCalibrated;
         };
 
         this.calibration = null;
 
-        this.calibrate = function (calib, isLogX, isLogY, noRotationCorrection) {
+        this.calibrate = function(calib, isLogX, isLogY, noRotationCorrection) {
             this.calibration = calib;
             isCalibrated = processCalibration(calib, isLogX, isLogY, noRotationCorrection);
             return isCalibrated;
         };
 
-        this.pixelToData = function (pxi, pyi) {
+        this.pixelToData = function(pxi, pyi) {
             var data = [],
                 xp, yp, xf, yf, dat_vec;
 
@@ -5452,7 +5452,7 @@ wpd.XYAxes = (function () {
             return data;
         };
 
-        this.dataToPixel = function (x, y) {
+        this.dataToPixel = function(x, y) {
             var xf, yf, dat_vec, rtnPix;
 
             if (isLogScaleX) {
@@ -5474,7 +5474,7 @@ wpd.XYAxes = (function () {
             };
         };
 
-        this.pixelToLiveString = function (pxi, pyi) {
+        this.pixelToLiveString = function(pxi, pyi) {
             var rtnString = '',
                 dataVal = this.pixelToData(pxi, pyi);
             if (isXDate) {
@@ -5492,7 +5492,7 @@ wpd.XYAxes = (function () {
             return rtnString;
         };
 
-        this.isDate = function (varIndex) {
+        this.isDate = function(varIndex) {
             if (varIndex === 0) {
                 return isXDate;
             } else {
@@ -5500,7 +5500,7 @@ wpd.XYAxes = (function () {
             }
         };
 
-        this.getInitialDateFormat = function (varIndex) {
+        this.getInitialDateFormat = function(varIndex) {
             if (varIndex === 0) {
                 return initialFormattingX;
             } else {
@@ -5508,27 +5508,27 @@ wpd.XYAxes = (function () {
             }
         };
 
-        this.isLogX = function () {
+        this.isLogX = function() {
             return isLogScaleX;
         };
 
-        this.isLogXNegative = function () {
+        this.isLogXNegative = function() {
             return isLogScaleXNegative;
         }
 
-        this.isLogY = function () {
+        this.isLogY = function() {
             return isLogScaleY;
         };
 
-        this.isLogYNegative = function () {
+        this.isLogYNegative = function() {
             return isLogScaleYNegative;
         }
 
-        this.noRotation = function () {
+        this.noRotation = function() {
             return noRotation;
         };
 
-        this.getOrientation = function () {
+        this.getOrientation = function() {
             // Used by histogram auto-extract method only at the moment.
             // Just indicate increasing y-axis at the moment so that we can work with histograms.
             return {
@@ -5538,12 +5538,12 @@ wpd.XYAxes = (function () {
             };
         };
 
-        this.getMetadata = function () {
+        this.getMetadata = function() {
             // deep clone
             return JSON.parse(JSON.stringify(metadata));
         };
 
-        this.setMetadata = function (obj) {
+        this.setMetadata = function(obj) {
             // deep clone
             metadata = JSON.parse(JSON.stringify(obj));
         };
@@ -5551,15 +5551,15 @@ wpd.XYAxes = (function () {
         this.name = "XY";
     };
 
-    AxesObj.prototype.numCalibrationPointsRequired = function () {
+    AxesObj.prototype.numCalibrationPointsRequired = function() {
         return 4;
     };
 
-    AxesObj.prototype.getDimensions = function () {
+    AxesObj.prototype.getDimensions = function() {
         return 2;
     };
 
-    AxesObj.prototype.getAxesLabels = function () {
+    AxesObj.prototype.getAxesLabels = function() {
         return ['X', 'Y'];
     };
 
@@ -5925,12 +5925,12 @@ wpd.dataTable = (function () {
         $digitizedDataTable.value = tableText;
     }
 
-    async function copyToClipboard() {
+    function copyToClipboard() {
         var $digitizedDataTable = document.getElementById('digitizedDataTable');
         $digitizedDataTable.focus();
         $digitizedDataTable.select();
         try {
-            !navigator.clipboard ? document.execCommand('copy') : await navigator.clipboard.writeText($digitizedDataTable.value);
+            !navigator.clipboard ? document.execCommand('copy') : navigator.clipboard.writeText(text_to_copy);
         } catch (ex) {
             console.log('copyToClipboard', ex.message);
         }
@@ -6017,7 +6017,7 @@ wpd.dataTable = (function () {
 
 /* Multi-layered canvas widget to display plot, data, graphics etc. */
 var wpd = wpd || {};
-wpd.graphicsWidget = (function () {
+wpd.graphicsWidget = (function() {
     var $mainCanvas, // original picture is displayed here
         $dataCanvas, // data points
         $drawCanvas, // selection region graphics etc
@@ -6568,7 +6568,7 @@ wpd.graphicsWidget = (function () {
         $canvasDiv = document.getElementById('canvasDiv');
 
         // Extended crosshair
-        document.addEventListener('keydown', function (ev) {
+        document.addEventListener('keydown', function(ev) {
             if (isCanvasInFocus) {
                 toggleExtendedCrosshair(ev);
             }
@@ -6578,10 +6578,10 @@ wpd.graphicsWidget = (function () {
         $topCanvas.addEventListener('mousemove', hoverOverCanvasHandler, false);
 
         // drag over canvas
-        $topCanvas.addEventListener('dragover', function (evt) {
+        $topCanvas.addEventListener('dragover', function(evt) {
             evt.preventDefault();
         }, true);
-        $topCanvas.addEventListener("drop", function (evt) {
+        $topCanvas.addEventListener("drop", function(evt) {
             evt.preventDefault();
             dropHandler(evt);
         }, true);
@@ -6593,14 +6593,14 @@ wpd.graphicsWidget = (function () {
         $topCanvas.addEventListener("mouseout", onMouseOut, true);
         document.addEventListener("mouseup", onDocumentMouseUp, false);
 
-        document.addEventListener("mousedown", function (ev) {
+        document.addEventListener("mousedown", function(ev) {
             if (ev.target === $topCanvas) {
                 isCanvasInFocus = true;
             } else {
                 isCanvasInFocus = false;
             }
         }, false);
-        document.addEventListener("keydown", function (ev) {
+        document.addEventListener("keydown", function(ev) {
             if (isCanvasInFocus) {
                 onKeyDown(ev);
             }
@@ -6609,7 +6609,7 @@ wpd.graphicsWidget = (function () {
         wpd.zoomView.initZoom();
 
         // Paste image from clipboard
-        window.addEventListener('paste', function (event) {
+        window.addEventListener('paste', function(event) {
             pasteHandler(event);
         }, false);
     }
@@ -6793,11 +6793,11 @@ wpd.graphicsWidget = (function () {
             // reject any non-image files
             if (imageFile.type.match("image.*")) {
                 let reader = new FileReader();
-                reader.onload = function () {
+                reader.onload = function() {
                     let url = reader.result;
                     new Promise((resolve, reject) => {
                         let image = new Image();
-                        image.onload = function () {
+                        image.onload = function() {
                             $tempImageCanvas.width = image.width;
                             $tempImageCanvas.height = image.height;
                             tempImageCtx.drawImage(image, 0, 0, image.width, image.height);
@@ -6895,7 +6895,7 @@ wpd.graphicsWidget = (function () {
 
 // layoutManager.js - manage layout of main sections on the screen.
 var wpd = wpd || {};
-wpd.layoutManager = (function () {
+wpd.layoutManager = (function() {
     var layoutTimer, $graphicsContainer, $sidebarContainer, $sidebarControlsContainer,
         $mainContainer, $treeContainer;
 
@@ -6968,7 +6968,7 @@ wpd.layoutManager = (function () {
 
 var wpd = wpd || {};
 
-wpd.pointGroups = (function () {
+wpd.pointGroups = (function() {
     const settingsPopupID = "point-group-settings-popup";
     const deleteTuplePopupID = "point-tuple-delete-popup";
 
@@ -7620,7 +7620,7 @@ wpd.unsupported = function () {
 */
 
 var wpd = wpd || {};
-wpd.sidebar = (function () {
+wpd.sidebar = (function() {
     function show(sbid) { // Shows a specific sidebar
         clear();
         let sb = document.getElementById(sbid);
@@ -7673,7 +7673,7 @@ wpd.sidebar = (function () {
     along with WebPlotDigitizer.  If not, see <http://www.gnu.org/licenses/>.
 */
 var wpd = wpd || {};
-wpd.toolbar = (function () {
+wpd.toolbar = (function() {
     function show(tbid) { // Shows a specific toolbar
         clear();
         let tb = document.getElementById(tbid);
@@ -7742,17 +7742,17 @@ wpd.TreeWidget = class {
         for (let i = 0; i < data.length; i++) {
             let item = data[i];
             this.itemCount++;
-            if (typeof (item) === "string") {
+            if (typeof(item) === "string") {
                 let itemPath = basePath + "/" + item;
                 htmlStr += "<li title=\"" + item + "\">";
                 let itemColor = this.itemColors[itemPath];
-                if (typeof (itemColor) !== 'undefined') {
+                if (typeof(itemColor) !== 'undefined') {
                     htmlStr += "<div class=\"tree-item-icon\" style=\"background-color: " + itemColor.toRGBString() + ";\"></div>";
                 }
                 htmlStr += "<span class=\"tree-item\" id=\"tree-item-id-" + this.itemCount + "\">" +
                     item + "</span>";
                 this.idmap[this.itemCount] = itemPath;
-            } else if (typeof (item) === "object") {
+            } else if (typeof(item) === "object") {
                 htmlStr += "<li>";
                 let labelKey = Object.keys(item)[0];
                 htmlStr += "<span class=\"tree-folder\" id=\"tree-item-id-" + this.itemCount +
@@ -7781,10 +7781,10 @@ wpd.TreeWidget = class {
     _unselectAll() {
         const $folders = this.$mainElem.querySelectorAll(".tree-folder");
         const $items = this.$mainElem.querySelectorAll(".tree-item");
-        $folders.forEach(function ($e) {
+        $folders.forEach(function($e) {
             $e.classList.remove("tree-selected");
         });
-        $items.forEach(function ($e) {
+        $items.forEach(function($e) {
             $e.classList.remove("tree-selected");
         });
         this.selectedPath = null;
@@ -7850,14 +7850,14 @@ wpd.TreeWidget = class {
     }
 };
 
-wpd.tree = (function () {
+wpd.tree = (function() {
     let treeWidget = null;
     let activeDataset = null;
     let activeAxes = null;
 
     // polyfill for IE11/Microsoft Edge
     if (window.NodeList && !NodeList.prototype.forEach) {
-        NodeList.prototype.forEach = function (callback, thisArg) {
+        NodeList.prototype.forEach = function(callback, thisArg) {
             thisArg = thisArg || window;
             for (let i = 0; i < this.length; i++) {
                 callback.call(thisArg, this[i], i, this);
@@ -7956,7 +7956,7 @@ wpd.tree = (function () {
 
     function showTreeItemWidget(id) {
         const $treeWidgets = document.querySelectorAll(".tree-widget");
-        $treeWidgets.forEach(function ($e) {
+        $treeWidgets.forEach(function($e) {
             if ($e.id === id) {
                 $e.style.display = "inline";
             } else {
@@ -8096,7 +8096,7 @@ wpd.tree = (function () {
 
         let msColl = fileManager.filterToCurrentFileMeasurements(
             isDist ? plotData.getMeasurementsByType(wpd.DistanceMeasurement) :
-                plotData.getMeasurementsByType(wpd.AreaMeasurement)
+            plotData.getMeasurementsByType(wpd.AreaMeasurement)
         );
         let ms;
 
@@ -8310,7 +8310,7 @@ wpd.tree = (function () {
 
 var wpd = wpd || {};
 
-wpd.webcamCapture = (function () {
+wpd.webcamCapture = (function() {
     var cameraStream;
 
     function isSupported() {
@@ -8335,13 +8335,13 @@ wpd.webcamCapture = (function () {
         var $camVideo = document.getElementById('webcamVideo');
         navigator.getUserMedia = getUserMedia();
         navigator.getUserMedia({
-            video: true
-        },
-            function (stream) {
+                video: true
+            },
+            function(stream) {
                 cameraStream = stream;
                 $camVideo.src = window.URL.createObjectURL(stream);
             },
-            function () { });
+            function() {});
     }
 
     function capture() {
@@ -8354,7 +8354,7 @@ wpd.webcamCapture = (function () {
         webcamCtx.drawImage($camVideo, 0, 0);
         imageData = webcamCtx.getImageData(0, 0, $webcamCanvas.width, $webcamCanvas.height);
         cameraOff();
-        wpd.graphicsWidget.runImageOp(function () {
+        wpd.graphicsWidget.runImageOp(function() {
             return {
                 imageData: imageData,
                 width: $webcamCanvas.width,
@@ -8401,7 +8401,7 @@ wpd.webcamCapture = (function () {
 
 /* Zoomed-in view */
 var wpd = wpd || {};
-wpd.zoomView = (function () {
+wpd.zoomView = (function() {
     var zCanvas, zctx, tempCanvas, tctx, zWindowWidth = 250,
         zWindowHeight = 250,
         $mPosn, pix = [],
@@ -8526,8 +8526,8 @@ wpd.zoomView = (function () {
 */
 var wpd = wpd || {};
 
-wpd.AxesCornersTool = (function () {
-    var Tool = function (calibration, reloadTool) {
+wpd.AxesCornersTool = (function() {
+    var Tool = function(calibration, reloadTool) {
         var pointCount = 0,
             _calibration = calibration,
             isCapturingCorners = true;
@@ -8541,7 +8541,7 @@ wpd.AxesCornersTool = (function () {
             wpd.graphicsWidget.resetData();
         }
 
-        this.onMouseClick = function (ev, pos, imagePos) {
+        this.onMouseClick = function(ev, pos, imagePos) {
             if (isCapturingCorners) {
                 pointCount = pointCount + 1;
 
@@ -8566,7 +8566,7 @@ wpd.AxesCornersTool = (function () {
             }
         };
 
-        this.onKeyDown = function (ev) {
+        this.onKeyDown = function(ev) {
             if (_calibration.getSelectedPoints().length === 0) {
                 return;
             }
@@ -8575,7 +8575,7 @@ wpd.AxesCornersTool = (function () {
                 pointPx = selPoint.px,
                 pointPy = selPoint.py,
                 stepSize = ev.shiftKey === true ? 5 / wpd.graphicsWidget.getZoomRatio() :
-                    0.5 / wpd.graphicsWidget.getZoomRatio();
+                0.5 / wpd.graphicsWidget.getZoomRatio();
 
             // rotate to current rotation
             const currentRotation = wpd.graphicsWidget.getRotation();
@@ -8613,18 +8613,18 @@ wpd.AxesCornersTool = (function () {
     return Tool;
 })();
 
-wpd.AlignmentCornersRepainter = (function () {
-    var Tool = function (calibration) {
+wpd.AlignmentCornersRepainter = (function() {
+    var Tool = function(calibration) {
         var _calibration = calibration;
 
         this.painterName = 'AlignmentCornersReptainer';
 
-        this.onForcedRedraw = function () {
+        this.onForcedRedraw = function() {
             wpd.graphicsWidget.resetData();
             this.onRedraw();
         };
 
-        this.onRedraw = function () {
+        this.onRedraw = function() {
             if (_calibration == null) {
                 return;
             }
@@ -8728,11 +8728,11 @@ wpd.CircularChartRecorderAlignmentRepainter = class {
 
 var wpd = wpd || {};
 
-wpd.ColorPickerTool = (function () {
-    var Tool = function () {
+wpd.ColorPickerTool = (function() {
+    var Tool = function() {
         var ctx = wpd.graphicsWidget.getAllContexts();
 
-        this.onMouseClick = function (ev, pos, imagePos) {
+        this.onMouseClick = function(ev, pos, imagePos) {
             var ir, ig, ib, ia, pixData;
 
             pixData = ctx.oriImageCtx.getImageData(imagePos.x, imagePos.y, 1, 1);
@@ -8748,16 +8748,16 @@ wpd.ColorPickerTool = (function () {
             this.onComplete([ir, ig, ib]);
         };
 
-        this.onComplete = function (col) { };
+        this.onComplete = function(col) {};
     };
     return Tool;
 })();
 
-wpd.ColorFilterRepainter = (function () {
-    var Painter = function () {
+wpd.ColorFilterRepainter = (function() {
+    var Painter = function() {
         this.painterName = 'colorFilterRepainter';
 
-        this.onRedraw = function () {
+        this.onRedraw = function() {
             let ds = wpd.tree.getActiveDataset();
             let autoDetector = wpd.appData.getPlotData().getAutoDetectionDataForDataset(ds);
             wpd.colorSelectionWidget.paintFilteredColor(autoDetector.binaryData, autoDetector.mask);
@@ -8787,7 +8787,7 @@ wpd.ColorFilterRepainter = (function () {
 
 var wpd = wpd || {};
 
-wpd.graphicsHelper = (function () {
+wpd.graphicsHelper = (function() {
     // imagePx - relative to original image
     // fillStyle - e.g. "rgb(200,0,0)"
     // label - e.g. "Bar 0"
@@ -8904,11 +8904,11 @@ wpd.graphicsHelper = (function () {
 
 var wpd = wpd || {};
 
-wpd.GridColorFilterRepainter = (function () {
-    var Painter = function () {
+wpd.GridColorFilterRepainter = (function() {
+    var Painter = function() {
         this.painterName = 'gridColorFilterRepainter';
 
-        this.onRedraw = function () {
+        this.onRedraw = function() {
             var autoDetector = wpd.appData.getPlotData().getGridDetectionData();
             wpd.colorSelectionWidget.paintFilteredColor(autoDetector.binaryData,
                 autoDetector.gridMask.pixels);
@@ -8918,49 +8918,49 @@ wpd.GridColorFilterRepainter = (function () {
 })();
 
 // TODO: Think of reusing mask.js code here
-wpd.GridBoxTool = (function () {
-    var Tool = function () {
+wpd.GridBoxTool = (function() {
+    var Tool = function() {
         var isDrawing = false,
             topImageCorner, topScreenCorner,
             ctx = wpd.graphicsWidget.getAllContexts(),
             moveTimer, screen_pos,
 
             mouseMoveHandler =
-                function () {
-                    wpd.graphicsWidget.resetHover();
-                    ctx.hoverCtx.strokeStyle = "rgb(0,0,0)";
-                    ctx.hoverCtx.strokeRect(topScreenCorner.x, topScreenCorner.y,
-                        screen_pos.x - topScreenCorner.x,
-                        screen_pos.y - topScreenCorner.y);
-                },
+            function() {
+                wpd.graphicsWidget.resetHover();
+                ctx.hoverCtx.strokeStyle = "rgb(0,0,0)";
+                ctx.hoverCtx.strokeRect(topScreenCorner.x, topScreenCorner.y,
+                    screen_pos.x - topScreenCorner.x,
+                    screen_pos.y - topScreenCorner.y);
+            },
 
             mouseUpHandler =
-                function (ev, pos, imagePos) {
-                    if (isDrawing === false) {
-                        return;
-                    }
-                    clearTimeout(moveTimer);
-                    isDrawing = false;
-                    wpd.graphicsWidget.resetHover();
-                    ctx.dataCtx.fillStyle = "rgba(255,255,0,0.8)";
-                    ctx.dataCtx.fillRect(topScreenCorner.x, topScreenCorner.y,
-                        pos.x - topScreenCorner.x, pos.y - topScreenCorner.y);
-                    ctx.oriDataCtx.fillStyle = "rgba(255,255,0,0.8)";
-                    ctx.oriDataCtx.fillRect(topImageCorner.x, topImageCorner.y,
-                        imagePos.x - topImageCorner.x,
-                        imagePos.y - topImageCorner.y);
-                },
+            function(ev, pos, imagePos) {
+                if (isDrawing === false) {
+                    return;
+                }
+                clearTimeout(moveTimer);
+                isDrawing = false;
+                wpd.graphicsWidget.resetHover();
+                ctx.dataCtx.fillStyle = "rgba(255,255,0,0.8)";
+                ctx.dataCtx.fillRect(topScreenCorner.x, topScreenCorner.y,
+                    pos.x - topScreenCorner.x, pos.y - topScreenCorner.y);
+                ctx.oriDataCtx.fillStyle = "rgba(255,255,0,0.8)";
+                ctx.oriDataCtx.fillRect(topImageCorner.x, topImageCorner.y,
+                    imagePos.x - topImageCorner.x,
+                    imagePos.y - topImageCorner.y);
+            },
 
             mouseOutPos = null,
             mouseOutImagePos = null;
 
-        this.onAttach = function () {
+        this.onAttach = function() {
             wpd.graphicsWidget.setRepainter(new wpd.GridMaskPainter());
             document.getElementById('grid-mask-box').classList.add('pressed-button');
             document.getElementById('grid-mask-view').classList.add('pressed-button');
         };
 
-        this.onMouseDown = function (ev, pos, imagePos) {
+        this.onMouseDown = function(ev, pos, imagePos) {
             if (isDrawing === true)
                 return;
             isDrawing = true;
@@ -8968,7 +8968,7 @@ wpd.GridBoxTool = (function () {
             topScreenCorner = pos;
         };
 
-        this.onMouseMove = function (ev, pos, imagePos) {
+        this.onMouseMove = function(ev, pos, imagePos) {
             if (isDrawing === false)
                 return;
             screen_pos = pos;
@@ -8976,7 +8976,7 @@ wpd.GridBoxTool = (function () {
             moveTimer = setTimeout(mouseMoveHandler, 2);
         };
 
-        this.onMouseOut = function (ev, pos, imagePos) {
+        this.onMouseOut = function(ev, pos, imagePos) {
             if (isDrawing === true) {
                 clearTimeout(moveTimer);
                 mouseOutPos = pos;
@@ -8984,7 +8984,7 @@ wpd.GridBoxTool = (function () {
             }
         };
 
-        this.onDocumentMouseUp = function (ev, pos, imagePos) {
+        this.onDocumentMouseUp = function(ev, pos, imagePos) {
             if (mouseOutPos != null && mouseOutImagePos != null) {
                 mouseUpHandler(ev, mouseOutPos, mouseOutImagePos);
             } else {
@@ -8994,11 +8994,11 @@ wpd.GridBoxTool = (function () {
             mouseOutImagePos = null;
         };
 
-        this.onMouseUp = function (ev, pos, imagePos) {
+        this.onMouseUp = function(ev, pos, imagePos) {
             mouseUpHandler(ev, pos, imagePos);
         };
 
-        this.onRemove = function () {
+        this.onRemove = function() {
             document.getElementById('grid-mask-box').classList.remove('pressed-button');
             document.getElementById('grid-mask-view').classList.remove('pressed-button');
             wpd.gridDetection.grabMask();
@@ -9007,14 +9007,14 @@ wpd.GridBoxTool = (function () {
     return Tool;
 })();
 
-wpd.GridViewMaskTool = (function () {
-    var Tool = function () {
-        this.onAttach = function () {
+wpd.GridViewMaskTool = (function() {
+    var Tool = function() {
+        this.onAttach = function() {
             wpd.graphicsWidget.setRepainter(new wpd.GridMaskPainter());
             document.getElementById('grid-mask-view').classList.add('pressed-button');
         };
 
-        this.onRemove = function () {
+        this.onRemove = function() {
             document.getElementById('grid-mask-view').classList.remove('pressed-button');
             wpd.gridDetection.grabMask();
         };
@@ -9023,11 +9023,11 @@ wpd.GridViewMaskTool = (function () {
     return Tool;
 })();
 
-wpd.GridMaskPainter = (function () {
-    var Painter = function () {
+wpd.GridMaskPainter = (function() {
+    var Painter = function() {
         var ctx = wpd.graphicsWidget.getAllContexts(),
             autoDetector = wpd.appData.getPlotData().getGridDetectionData(),
-            painter = function () {
+            painter = function() {
                 if (autoDetector.gridMask.pixels == null ||
                     autoDetector.gridMask.pixels.size === 0) {
                     return;
@@ -9049,12 +9049,12 @@ wpd.GridMaskPainter = (function () {
 
         this.painterName = 'gridMaskPainter';
 
-        this.onRedraw = function () {
+        this.onRedraw = function() {
             wpd.gridDetection.grabMask();
             painter();
         };
 
-        this.onAttach = function () {
+        this.onAttach = function() {
             wpd.graphicsWidget.resetData();
             painter();
         };
@@ -9248,41 +9248,41 @@ wpd.CropTool = class {
 
     _getHotspotCoords() {
         return [{
-            x: this._topScreenCorner.x,
-            y: this._topScreenCorner.y
-        }, // nw
-        {
-            x: this._screenPos.x,
-            y: this._topScreenCorner.y
-        }, // ne
-        {
-            x: this._screenPos.x,
-            y: this._screenPos.y
-        }, // se
-        {
-            x: this._topScreenCorner.x,
-            y: this._screenPos.y
-        }, // sw
-        {
-            x: (this._topScreenCorner.x + this._screenPos.x) / 2,
-            y: this._topScreenCorner.y
-        }, // n
-        {
-            x: this._screenPos.x,
-            y: (this._topScreenCorner.y + this._screenPos.y) / 2
-        }, // e
-        {
-            x: (this._topScreenCorner.x + this._screenPos.x) / 2,
-            y: this._screenPos.y
-        }, // s
-        {
-            x: this._topScreenCorner.x,
-            y: (this._topScreenCorner.y + this._screenPos.y) / 2
-        }, // w
-        {
-            x: (this._topScreenCorner.x + this._screenPos.x) / 2,
-            y: (this._topScreenCorner.y + this._screenPos.y) / 2
-        } // c
+                x: this._topScreenCorner.x,
+                y: this._topScreenCorner.y
+            }, // nw
+            {
+                x: this._screenPos.x,
+                y: this._topScreenCorner.y
+            }, // ne
+            {
+                x: this._screenPos.x,
+                y: this._screenPos.y
+            }, // se
+            {
+                x: this._topScreenCorner.x,
+                y: this._screenPos.y
+            }, // sw
+            {
+                x: (this._topScreenCorner.x + this._screenPos.x) / 2,
+                y: this._topScreenCorner.y
+            }, // n
+            {
+                x: this._screenPos.x,
+                y: (this._topScreenCorner.y + this._screenPos.y) / 2
+            }, // e
+            {
+                x: (this._topScreenCorner.x + this._screenPos.x) / 2,
+                y: this._screenPos.y
+            }, // s
+            {
+                x: this._topScreenCorner.x,
+                y: (this._topScreenCorner.y + this._screenPos.y) / 2
+            }, // w
+            {
+                x: (this._topScreenCorner.x + this._screenPos.x) / 2,
+                y: (this._topScreenCorner.y + this._screenPos.y) / 2
+            } // c
         ];
     }
 
@@ -9365,7 +9365,7 @@ wpd.CropTool = class {
 
 var wpd = wpd || {};
 
-wpd.imageOps = (function () {
+wpd.imageOps = (function() {
     function hflipOp(idata, iwidth, iheight) {
         var rowi, coli, index, mindex, tval, p;
         for (rowi = 0; rowi < iheight; rowi++) {
@@ -9442,43 +9442,43 @@ wpd.imageOps = (function () {
 var wpd = wpd || {};
 
 wpd.keyCodes = {
-    isUp: function (code) {
+    isUp: function(code) {
         return code === 38;
     },
-    isDown: function (code) {
+    isDown: function(code) {
         return code === 40;
     },
-    isLeft: function (code) {
+    isLeft: function(code) {
         return code === 37;
     },
-    isRight: function (code) {
+    isRight: function(code) {
         return code === 39;
     },
-    isTab: function (code) {
+    isTab: function(code) {
         return code === 9;
     },
-    isDel: function (code) {
+    isDel: function(code) {
         return code === 46;
     },
-    isBackspace: function (code) {
+    isBackspace: function(code) {
         return code === 8;
     },
-    isAlphabet: function (code, alpha) {
+    isAlphabet: function(code, alpha) {
         if (code > 90 || code < 65) {
             return false;
         }
         return String.fromCharCode(code).toLowerCase() === alpha;
     },
-    isPeriod: function (code) {
+    isPeriod: function(code) {
         return code === 190;
     },
-    isComma: function (code) {
+    isComma: function(code) {
         return code === 188;
     },
-    isEnter: function (code) {
+    isEnter: function(code) {
         return code === 13;
     },
-    isEsc: function (code) {
+    isEsc: function(code) {
         return code === 27;
     }
 };/*
@@ -9504,9 +9504,9 @@ wpd.keyCodes = {
 
 var wpd = wpd || {};
 
-wpd.ManualSelectionTool = (function () {
-    var Tool = function (axes, dataset) {
-        this.onAttach = function () {
+wpd.ManualSelectionTool = (function() {
+    var Tool = function(axes, dataset) {
+        this.onAttach = function() {
             document.getElementById('manual-select-button').classList.add('pressed-button');
             wpd.graphicsWidget.setRepainter(new wpd.DataPointsRepainter(axes, dataset));
 
@@ -9517,7 +9517,7 @@ wpd.ManualSelectionTool = (function () {
             }
         };
 
-        this.onMouseClick = function (ev, pos, imagePos) {
+        this.onMouseClick = function(ev, pos, imagePos) {
             const addPixelArgs = [imagePos.x, imagePos.y];
             const hasPointGroups = dataset.hasPointGroups();
 
@@ -9598,7 +9598,7 @@ wpd.ManualSelectionTool = (function () {
             });
         };
 
-        this.onRemove = function () {
+        this.onRemove = function() {
             document.getElementById('manual-select-button').classList.remove('pressed-button');
 
             // hide point group controls if set
@@ -9607,7 +9607,7 @@ wpd.ManualSelectionTool = (function () {
             }
         };
 
-        this.onKeyDown = function (ev) {
+        this.onKeyDown = function(ev) {
             var lastPtIndex = dataset.getCount() - 1,
                 lastPt = dataset.getPixel(lastPtIndex),
                 stepSize = 0.5 / wpd.graphicsWidget.getZoomRatio();
@@ -9656,16 +9656,16 @@ wpd.ManualSelectionTool = (function () {
     return Tool;
 })();
 
-wpd.DeleteDataPointTool = (function () {
-    var Tool = function (axes, dataset) {
+wpd.DeleteDataPointTool = (function() {
+    var Tool = function(axes, dataset) {
         var ctx = wpd.graphicsWidget.getAllContexts();
 
-        this.onAttach = function () {
+        this.onAttach = function() {
             document.getElementById('delete-point-button').classList.add('pressed-button');
             wpd.graphicsWidget.setRepainter(new wpd.DataPointsRepainter(axes, dataset));
         };
 
-        this.onMouseClick = function (ev, pos, imagePos) {
+        this.onMouseClick = function(ev, pos, imagePos) {
             const tupleCallback = (imagePos, index) => {
                 let indexes = [];
 
@@ -9753,13 +9753,13 @@ wpd.DeleteDataPointTool = (function () {
             }
         };
 
-        this.onKeyDown = function (ev) {
+        this.onKeyDown = function(ev) {
             if (wpd.acquireData.isToolSwitchKey(ev.keyCode)) {
                 wpd.acquireData.switchToolOnKeyPress(String.fromCharCode(ev.keyCode).toLowerCase());
             }
         };
 
-        this.onRemove = function () {
+        this.onRemove = function() {
             document.getElementById('delete-point-button').classList.remove('pressed-button');
         };
     };
@@ -9869,8 +9869,8 @@ wpd.DataPointsRepainter = class {
     }
 };
 
-wpd.AdjustDataPointTool = (function () {
-    const Tool = function (axes, dataset) {
+wpd.AdjustDataPointTool = (function() {
+    const Tool = function(axes, dataset) {
         const $button = document.getElementById('manual-adjust-button');
         const $overrideSection = document.getElementById('value-overrides-controls');
         const $overrideButton = document.getElementById('override-data-values');
@@ -9884,14 +9884,14 @@ wpd.AdjustDataPointTool = (function () {
         let imageP1 = null;
         let imageP2 = null;
 
-        this.onAttach = function () {
+        this.onAttach = function() {
             $button.classList.add('pressed-button');
             $overrideButton.classList.remove('pressed-button');
             wpd.graphicsWidget.setRepainter(new wpd.DataPointsRepainter(axes, dataset));
             wpd.toolbar.show('adjustDataPointsToolbar');
         };
 
-        this.onRemove = function () {
+        this.onRemove = function() {
             dataset.unselectAll();
             wpd.graphicsWidget.forceHandlerRepaint();
             $button.classList.remove('pressed-button');
@@ -9901,7 +9901,7 @@ wpd.AdjustDataPointTool = (function () {
             $overrideSection.hidden = true;
         };
 
-        this.onMouseDown = function (ev, pos, imagePos) {
+        this.onMouseDown = function(ev, pos, imagePos) {
             isMouseDown = true;
 
             // record the first selection rectangle point
@@ -9912,7 +9912,7 @@ wpd.AdjustDataPointTool = (function () {
             dataset.unselectAll();
         };
 
-        this.onMouseUp = function (ev, pos) {
+        this.onMouseUp = function(ev, pos) {
             if (isSelecting === true) {
                 // reset hover context to remove selection box drawing
                 wpd.graphicsWidget.resetHover();
@@ -9925,7 +9925,7 @@ wpd.AdjustDataPointTool = (function () {
                 clearTimeout(_drawTimer);
 
                 // push these reset statements to the bottom of the events message queue
-                setTimeout(function () {
+                setTimeout(function() {
                     isSelecting = false;
                     isMouseDown = false;
                     p1 = null;
@@ -9944,7 +9944,7 @@ wpd.AdjustDataPointTool = (function () {
             }
         };
 
-        this.onMouseMove = function (ev, pos, imagePos) {
+        this.onMouseMove = function(ev, pos, imagePos) {
             if (isMouseDown === true) {
                 isSelecting = true;
 
@@ -9954,13 +9954,13 @@ wpd.AdjustDataPointTool = (function () {
 
                 // refresh the selection rectangle every 1 ms
                 clearTimeout(_drawTimer);
-                _drawTimer = setTimeout(function () {
+                _drawTimer = setTimeout(function() {
                     this._drawSelectionBox();
                 }.bind(this), 1);
             }
         };
 
-        this._drawSelectionBox = function () {
+        this._drawSelectionBox = function() {
             // reset hover context to remove previous selection box
             wpd.graphicsWidget.resetHover();
 
@@ -9979,7 +9979,7 @@ wpd.AdjustDataPointTool = (function () {
             }
         };
 
-        this._onSelect = function (ev, pixelIndexes) {
+        this._onSelect = function(ev, pixelIndexes) {
             wpd.graphicsWidget.forceHandlerRepaint();
             wpd.graphicsWidget.updateZoomOnEvent(ev);
             this.toggleOverrideSection(pixelIndexes);
@@ -9990,7 +9990,7 @@ wpd.AdjustDataPointTool = (function () {
             });
         };
 
-        this.onMouseClick = function (ev, pos, imagePos) {
+        this.onMouseClick = function(ev, pos, imagePos) {
             if (isSelecting === false) {
                 dataset.unselectAll();
                 const pixelIndex = dataset.selectNearestPixel(imagePos.x, imagePos.y);
@@ -9998,7 +9998,7 @@ wpd.AdjustDataPointTool = (function () {
             }
         };
 
-        this.onKeyDown = function (ev) {
+        this.onKeyDown = function(ev) {
             if (wpd.acquireData.isToolSwitchKey(ev.keyCode)) {
                 wpd.acquireData.switchToolOnKeyPress(String.fromCharCode(ev.keyCode).toLowerCase());
                 return;
@@ -10021,7 +10021,7 @@ wpd.AdjustDataPointTool = (function () {
                 x: null,
                 y: null
             };
-            selIndexes.forEach(function (selIndex) {
+            selIndexes.forEach(function(selIndex) {
                 const stepSize = ev.shiftKey === true ? 5 / wpd.graphicsWidget.getZoomRatio() :
                     0.5 / wpd.graphicsWidget.getZoomRatio();
 
@@ -10122,7 +10122,7 @@ wpd.AdjustDataPointTool = (function () {
             ev.stopPropagation();
         };
 
-        this.toggleOverrideSection = function (pixelIndexes) {
+        this.toggleOverrideSection = function(pixelIndexes) {
             // Bar charts currently not supported
             const $overriddenIndicator = document.getElementById('overridden-data-indicator');
 
@@ -10176,7 +10176,7 @@ wpd.AdjustDataPointTool = (function () {
             }
         };
 
-        this.displayMask = function () {
+        this.displayMask = function() {
             // create a mask that makes this tool appear to still be selected
             // when the override popup is engaged
             $button.classList.add('pressed-button');
@@ -10188,18 +10188,18 @@ wpd.AdjustDataPointTool = (function () {
     return Tool;
 })();
 
-wpd.EditLabelsTool = function (axes, dataset) {
-    this.onAttach = function () {
+wpd.EditLabelsTool = function(axes, dataset) {
+    this.onAttach = function() {
         document.getElementById('edit-data-labels').classList.add('pressed-button');
         wpd.graphicsWidget.setRepainter(new wpd.DataPointsRepainter(axes, dataset));
     };
 
-    this.onRemove = function () {
+    this.onRemove = function() {
         document.getElementById('edit-data-labels').classList.remove('pressed-button');
         dataset.unselectAll();
     };
 
-    this.onMouseClick = function (ev, pos, imagePos) {
+    this.onMouseClick = function(ev, pos, imagePos) {
         var dataSeries = dataset,
             pixelIndex;
         dataSeries.unselectAll();
@@ -10221,7 +10221,7 @@ wpd.EditLabelsTool = function (axes, dataset) {
         }
     };
 
-    this.onKeyDown = function (ev) {
+    this.onKeyDown = function(ev) {
         if (wpd.acquireData.isToolSwitchKey(ev.keyCode)) {
             wpd.acquireData.switchToolOnKeyPress(String.fromCharCode(ev.keyCode).toLowerCase());
         }
@@ -10229,7 +10229,7 @@ wpd.EditLabelsTool = function (axes, dataset) {
 };
 
 wpd.dataPointCounter = {
-    setCount: function (count) {
+    setCount: function(count) {
         let $counters = document.getElementsByClassName('data-point-counter');
         for (let ci = 0; ci < $counters.length; ci++) {
             $counters[ci].innerHTML = count;
@@ -10258,49 +10258,49 @@ wpd.dataPointCounter = {
 
 var wpd = wpd || {};
 
-wpd.BoxMaskTool = (function () {
-    var Tool = function () {
+wpd.BoxMaskTool = (function() {
+    var Tool = function() {
         var isDrawing = false,
             topImageCorner, topScreenCorner,
             ctx = wpd.graphicsWidget.getAllContexts(),
             moveTimer, screen_pos,
 
             mouseMoveHandler =
-                function () {
-                    wpd.graphicsWidget.resetHover();
-                    ctx.hoverCtx.strokeStyle = "rgb(0,0,0)";
-                    ctx.hoverCtx.strokeRect(topScreenCorner.x, topScreenCorner.y,
-                        screen_pos.x - topScreenCorner.x,
-                        screen_pos.y - topScreenCorner.y);
-                },
+            function() {
+                wpd.graphicsWidget.resetHover();
+                ctx.hoverCtx.strokeStyle = "rgb(0,0,0)";
+                ctx.hoverCtx.strokeRect(topScreenCorner.x, topScreenCorner.y,
+                    screen_pos.x - topScreenCorner.x,
+                    screen_pos.y - topScreenCorner.y);
+            },
 
             mouseUpHandler =
-                function (ev, pos, imagePos) {
-                    if (isDrawing === false) {
-                        return;
-                    }
-                    clearTimeout(moveTimer);
-                    isDrawing = false;
-                    wpd.graphicsWidget.resetHover();
-                    ctx.dataCtx.fillStyle = "rgba(255,255,0,1)";
-                    ctx.dataCtx.fillRect(topScreenCorner.x, topScreenCorner.y,
-                        pos.x - topScreenCorner.x, pos.y - topScreenCorner.y);
-                    ctx.oriDataCtx.fillStyle = "rgba(255,255,0,1)";
-                    ctx.oriDataCtx.fillRect(topImageCorner.x, topImageCorner.y,
-                        imagePos.x - topImageCorner.x,
-                        imagePos.y - topImageCorner.y);
-                },
+            function(ev, pos, imagePos) {
+                if (isDrawing === false) {
+                    return;
+                }
+                clearTimeout(moveTimer);
+                isDrawing = false;
+                wpd.graphicsWidget.resetHover();
+                ctx.dataCtx.fillStyle = "rgba(255,255,0,1)";
+                ctx.dataCtx.fillRect(topScreenCorner.x, topScreenCorner.y,
+                    pos.x - topScreenCorner.x, pos.y - topScreenCorner.y);
+                ctx.oriDataCtx.fillStyle = "rgba(255,255,0,1)";
+                ctx.oriDataCtx.fillRect(topImageCorner.x, topImageCorner.y,
+                    imagePos.x - topImageCorner.x,
+                    imagePos.y - topImageCorner.y);
+            },
 
             mouseOutPos = null,
             mouseOutImagePos = null;
 
-        this.onAttach = function () {
+        this.onAttach = function() {
             wpd.graphicsWidget.setRepainter(new wpd.MaskPainter());
             document.getElementById('box-mask').classList.add('pressed-button');
             document.getElementById('view-mask').classList.add('pressed-button');
         };
 
-        this.onMouseDown = function (ev, pos, imagePos) {
+        this.onMouseDown = function(ev, pos, imagePos) {
             if (isDrawing === true)
                 return;
             isDrawing = true;
@@ -10308,7 +10308,7 @@ wpd.BoxMaskTool = (function () {
             topScreenCorner = pos;
         };
 
-        this.onMouseMove = function (ev, pos, imagePos) {
+        this.onMouseMove = function(ev, pos, imagePos) {
             if (isDrawing === false)
                 return;
             screen_pos = pos;
@@ -10316,7 +10316,7 @@ wpd.BoxMaskTool = (function () {
             moveTimer = setTimeout(mouseMoveHandler, 2);
         };
 
-        this.onMouseOut = function (ev, pos, imagePos) {
+        this.onMouseOut = function(ev, pos, imagePos) {
             if (isDrawing === true) {
                 clearTimeout(moveTimer);
                 mouseOutPos = pos;
@@ -10324,7 +10324,7 @@ wpd.BoxMaskTool = (function () {
             }
         };
 
-        this.onDocumentMouseUp = function (ev, pos, imagePos) {
+        this.onDocumentMouseUp = function(ev, pos, imagePos) {
             if (mouseOutPos != null && mouseOutImagePos != null) {
                 mouseUpHandler(ev, mouseOutPos, mouseOutImagePos);
             } else {
@@ -10334,11 +10334,11 @@ wpd.BoxMaskTool = (function () {
             mouseOutImagePos = null;
         };
 
-        this.onMouseUp = function (ev, pos, imagePos) {
+        this.onMouseUp = function(ev, pos, imagePos) {
             mouseUpHandler(ev, pos, imagePos);
         };
 
-        this.onRemove = function () {
+        this.onRemove = function() {
             document.getElementById('box-mask').classList.remove('pressed-button');
             document.getElementById('view-mask').classList.remove('pressed-button');
             wpd.dataMask.grabMask();
@@ -10347,12 +10347,12 @@ wpd.BoxMaskTool = (function () {
     return Tool;
 })();
 
-wpd.PenMaskTool = (function () {
-    var Tool = function () {
+wpd.PenMaskTool = (function() {
+    var Tool = function() {
         var strokeWidth, ctx = wpd.graphicsWidget.getAllContexts(),
             isDrawing = false,
             moveTimer,
-            screen_pos, image_pos, mouseMoveHandler = function () {
+            screen_pos, image_pos, mouseMoveHandler = function() {
                 ctx.dataCtx.strokeStyle = "rgba(255,255,0,1)";
                 ctx.dataCtx.lineTo(screen_pos.x, screen_pos.y);
                 ctx.dataCtx.stroke();
@@ -10362,14 +10362,14 @@ wpd.PenMaskTool = (function () {
                 ctx.oriDataCtx.stroke();
             };
 
-        this.onAttach = function () {
+        this.onAttach = function() {
             wpd.graphicsWidget.setRepainter(new wpd.MaskPainter());
             document.getElementById('pen-mask').classList.add('pressed-button');
             document.getElementById('view-mask').classList.add('pressed-button');
             document.getElementById('mask-paint-container').style.display = 'block';
         };
 
-        this.onMouseDown = function (ev, pos, imagePos) {
+        this.onMouseDown = function(ev, pos, imagePos) {
             if (isDrawing === true)
                 return;
             var lwidth = parseInt(document.getElementById('paintThickness').value, 10);
@@ -10385,7 +10385,7 @@ wpd.PenMaskTool = (function () {
             ctx.oriDataCtx.moveTo(imagePos.x, imagePos.y);
         };
 
-        this.onMouseMove = function (ev, pos, imagePos) {
+        this.onMouseMove = function(ev, pos, imagePos) {
             if (isDrawing === false)
                 return;
             screen_pos = pos;
@@ -10394,7 +10394,7 @@ wpd.PenMaskTool = (function () {
             moveTimer = setTimeout(mouseMoveHandler, 2);
         };
 
-        this.onMouseUp = function (ev, pos, imagePos) {
+        this.onMouseUp = function(ev, pos, imagePos) {
             clearTimeout(moveTimer);
             ctx.dataCtx.closePath();
             ctx.dataCtx.lineWidth = 1;
@@ -10403,11 +10403,11 @@ wpd.PenMaskTool = (function () {
             isDrawing = false;
         };
 
-        this.onMouseOut = function (ev, pos, imagePos) {
+        this.onMouseOut = function(ev, pos, imagePos) {
             this.onMouseUp(ev, pos, imagePos);
         };
 
-        this.onRemove = function () {
+        this.onRemove = function() {
             document.getElementById('pen-mask').classList.remove('pressed-button');
             document.getElementById('view-mask').classList.remove('pressed-button');
             document.getElementById('mask-paint-container').style.display = 'none';
@@ -10418,12 +10418,12 @@ wpd.PenMaskTool = (function () {
     return Tool;
 })();
 
-wpd.EraseMaskTool = (function () {
-    var Tool = function () {
+wpd.EraseMaskTool = (function() {
+    var Tool = function() {
         var strokeWidth, ctx = wpd.graphicsWidget.getAllContexts(),
             isDrawing = false,
             moveTimer,
-            screen_pos, image_pos, mouseMoveHandler = function () {
+            screen_pos, image_pos, mouseMoveHandler = function() {
                 ctx.dataCtx.globalCompositeOperation = "destination-out";
                 ctx.oriDataCtx.globalCompositeOperation = "destination-out";
 
@@ -10436,14 +10436,14 @@ wpd.EraseMaskTool = (function () {
                 ctx.oriDataCtx.stroke();
             };
 
-        this.onAttach = function () {
+        this.onAttach = function() {
             wpd.graphicsWidget.setRepainter(new wpd.MaskPainter());
             document.getElementById('erase-mask').classList.add('pressed-button');
             document.getElementById('view-mask').classList.add('pressed-button');
             document.getElementById('mask-erase-container').style.display = 'block';
         };
 
-        this.onMouseDown = function (ev, pos, imagePos) {
+        this.onMouseDown = function(ev, pos, imagePos) {
             if (isDrawing === true)
                 return;
             var lwidth = parseInt(document.getElementById('eraseThickness').value, 10);
@@ -10462,7 +10462,7 @@ wpd.EraseMaskTool = (function () {
             ctx.oriDataCtx.moveTo(imagePos.x, imagePos.y);
         };
 
-        this.onMouseMove = function (ev, pos, imagePos) {
+        this.onMouseMove = function(ev, pos, imagePos) {
             if (isDrawing === false)
                 return;
             screen_pos = pos;
@@ -10471,11 +10471,11 @@ wpd.EraseMaskTool = (function () {
             moveTimer = setTimeout(mouseMoveHandler, 2);
         };
 
-        this.onMouseOut = function (ev, pos, imagePos) {
+        this.onMouseOut = function(ev, pos, imagePos) {
             this.onMouseUp(ev, pos, imagePos);
         };
 
-        this.onMouseUp = function (ev, pos, imagePos) {
+        this.onMouseUp = function(ev, pos, imagePos) {
             clearTimeout(moveTimer);
             ctx.dataCtx.closePath();
             ctx.dataCtx.lineWidth = 1;
@@ -10488,7 +10488,7 @@ wpd.EraseMaskTool = (function () {
             isDrawing = false;
         };
 
-        this.onRemove = function () {
+        this.onRemove = function() {
             document.getElementById('erase-mask').classList.remove('pressed-button');
             document.getElementById('view-mask').classList.remove('pressed-button');
             document.getElementById('mask-erase-container').style.display = 'none';
@@ -10499,14 +10499,14 @@ wpd.EraseMaskTool = (function () {
     return Tool;
 })();
 
-wpd.ViewMaskTool = (function () {
-    var Tool = function () {
-        this.onAttach = function () {
+wpd.ViewMaskTool = (function() {
+    var Tool = function() {
+        this.onAttach = function() {
             wpd.graphicsWidget.setRepainter(new wpd.MaskPainter());
             document.getElementById('view-mask').classList.add('pressed-button');
         };
 
-        this.onRemove = function () {
+        this.onRemove = function() {
             document.getElementById('view-mask').classList.remove('pressed-button');
             wpd.dataMask.grabMask();
         };
@@ -10515,13 +10515,13 @@ wpd.ViewMaskTool = (function () {
     return Tool;
 })();
 
-wpd.MaskPainter = (function () {
-    var Painter = function () {
+wpd.MaskPainter = (function() {
+    var Painter = function() {
         let ctx = wpd.graphicsWidget.getAllContexts();
         let ds = wpd.tree.getActiveDataset();
         let autoDetector = wpd.appData.getPlotData().getAutoDetectionDataForDataset(ds);
 
-        let painter = function () {
+        let painter = function() {
             if (autoDetector.mask == null || autoDetector.mask.size === 0) {
                 return;
             }
@@ -10541,12 +10541,12 @@ wpd.MaskPainter = (function () {
 
         this.painterName = 'dataMaskPainter';
 
-        this.onRedraw = function () {
+        this.onRedraw = function() {
             wpd.dataMask.grabMask();
             painter();
         };
 
-        this.onAttach = function () {
+        this.onAttach = function() {
             painter();
         };
     };
@@ -10574,28 +10574,28 @@ wpd.MaskPainter = (function () {
 
 var wpd = wpd || {};
 
-wpd.AddMeasurementTool = (function () {
-    var Tool = function (mode) {
+wpd.AddMeasurementTool = (function() {
+    var Tool = function(mode) {
         var ctx = wpd.graphicsWidget.getAllContexts(),
             pointsCaptured = 0,
             isCapturing = true,
             plist = [];
 
-        this.onAttach = function () {
+        this.onAttach = function() {
             document.getElementById(mode.addButtonId).classList.add('pressed-button');
             if (mode.connectivity < 0) { // area/perimeter
                 document.getElementById("add-polygon-info").style.display = "block";
             }
         };
 
-        this.onRemove = function () {
+        this.onRemove = function() {
             document.getElementById(mode.addButtonId).classList.remove('pressed-button');
             if (mode.connectivity < 0) { // area/perimeter
                 document.getElementById("add-polygon-info").style.display = "none";
             }
         };
 
-        this.onKeyDown = function (ev) {
+        this.onKeyDown = function(ev) {
             // move the selected point or switch tools
             if (wpd.keyCodes.isAlphabet(ev.keyCode, 'a')) {
                 wpd.graphicsWidget.resetHover();
@@ -10616,7 +10616,7 @@ wpd.AddMeasurementTool = (function () {
             }
         };
 
-        this.onMouseClick = function (ev, pos, imagePos) {
+        this.onMouseClick = function(ev, pos, imagePos) {
             if (isCapturing) {
 
                 wpd.graphicsWidget.resetHover();
@@ -10673,7 +10673,7 @@ wpd.AddMeasurementTool = (function () {
             wpd.graphicsWidget.updateZoomOnEvent(ev);
         };
 
-        this.onMouseMove = function (ev, pos, imagePos) {
+        this.onMouseMove = function(ev, pos, imagePos) {
             if (isCapturing && pointsCaptured >= 1) {
                 wpd.graphicsWidget.resetHover();
 
@@ -10698,19 +10698,19 @@ wpd.AddMeasurementTool = (function () {
     return Tool;
 })();
 
-wpd.DeleteMeasurementTool = (function () {
-    var Tool = function (mode) {
+wpd.DeleteMeasurementTool = (function() {
+    var Tool = function(mode) {
         var ctx = wpd.graphicsWidget.getAllContexts();
 
-        this.onAttach = function () {
+        this.onAttach = function() {
             document.getElementById(mode.deleteButtonId).classList.add('pressed-button');
         };
 
-        this.onRemove = function () {
+        this.onRemove = function() {
             document.getElementById(mode.deleteButtonId).classList.remove('pressed-button');
         };
 
-        this.onKeyDown = function (ev) {
+        this.onKeyDown = function(ev) {
             // move the selected point or switch tools
             if (wpd.keyCodes.isAlphabet(ev.keyCode, 'a')) {
                 wpd.graphicsWidget.setTool(new wpd.AddMeasurementTool(mode));
@@ -10721,7 +10721,7 @@ wpd.DeleteMeasurementTool = (function () {
             }
         };
 
-        this.onMouseClick = function (ev, pos, imagePos) {
+        this.onMouseClick = function(ev, pos, imagePos) {
             mode.getData().deleteNearestConnection(imagePos.x, imagePos.y);
             wpd.graphicsWidget.setTool(new wpd.AdjustMeasurementTool(mode));
             wpd.graphicsWidget.resetData();
@@ -10732,18 +10732,18 @@ wpd.DeleteMeasurementTool = (function () {
     return Tool;
 })();
 
-wpd.AdjustMeasurementTool = (function () {
-    var Tool = function (mode) {
-        this.onAttach = function () { };
+wpd.AdjustMeasurementTool = (function() {
+    var Tool = function(mode) {
+        this.onAttach = function() {};
 
-        this.onMouseClick = function (ev, pos, imagePos) {
+        this.onMouseClick = function(ev, pos, imagePos) {
             // select the nearest point
             mode.getData().selectNearestPoint(imagePos.x, imagePos.y);
             wpd.graphicsWidget.forceHandlerRepaint();
             wpd.graphicsWidget.updateZoomOnEvent(ev);
         };
 
-        this.onKeyDown = function (ev) {
+        this.onKeyDown = function(ev) {
             // move the selected point or switch tools
             if (wpd.keyCodes.isAlphabet(ev.keyCode, 'a')) {
                 wpd.graphicsWidget.setTool(new wpd.AddMeasurementTool(mode));
@@ -10799,167 +10799,167 @@ wpd.AdjustMeasurementTool = (function () {
     return Tool;
 })();
 
-wpd.MeasurementRepainter = (function () {
-    var Painter = function (mode) {
+wpd.MeasurementRepainter = (function() {
+    var Painter = function(mode) {
         var ctx = wpd.graphicsWidget.getAllContexts(),
 
             drawLine =
-                function (sx0, sy0, sx1, sy1, ix0, iy0, ix1, iy1) {
-                    ctx.dataCtx.beginPath();
-                    ctx.dataCtx.strokeStyle = "rgb(0,0,10)";
-                    ctx.dataCtx.moveTo(sx0, sy0);
-                    ctx.dataCtx.lineTo(sx1, sy1);
-                    ctx.dataCtx.stroke();
+            function(sx0, sy0, sx1, sy1, ix0, iy0, ix1, iy1) {
+                ctx.dataCtx.beginPath();
+                ctx.dataCtx.strokeStyle = "rgb(0,0,10)";
+                ctx.dataCtx.moveTo(sx0, sy0);
+                ctx.dataCtx.lineTo(sx1, sy1);
+                ctx.dataCtx.stroke();
 
-                    ctx.oriDataCtx.beginPath();
-                    ctx.oriDataCtx.strokeStyle = "rgb(0,0,10)";
-                    ctx.oriDataCtx.moveTo(ix0, iy0);
-                    ctx.oriDataCtx.lineTo(ix1, iy1);
-                    ctx.oriDataCtx.stroke();
-                },
+                ctx.oriDataCtx.beginPath();
+                ctx.oriDataCtx.strokeStyle = "rgb(0,0,10)";
+                ctx.oriDataCtx.moveTo(ix0, iy0);
+                ctx.oriDataCtx.lineTo(ix1, iy1);
+                ctx.oriDataCtx.stroke();
+            },
 
             drawPoint =
-                function (sx, sy, ix, iy, isSelected) {
-                    ctx.dataCtx.beginPath();
-                    if (isSelected) {
-                        ctx.dataCtx.fillStyle = "rgb(0, 200, 0)";
-                    } else {
-                        ctx.dataCtx.fillStyle = "rgb(200, 0, 0)";
-                    }
-                    ctx.dataCtx.arc(sx, sy, 3, 0, 2.0 * Math.PI, true);
-                    ctx.dataCtx.fill();
+            function(sx, sy, ix, iy, isSelected) {
+                ctx.dataCtx.beginPath();
+                if (isSelected) {
+                    ctx.dataCtx.fillStyle = "rgb(0, 200, 0)";
+                } else {
+                    ctx.dataCtx.fillStyle = "rgb(200, 0, 0)";
+                }
+                ctx.dataCtx.arc(sx, sy, 3, 0, 2.0 * Math.PI, true);
+                ctx.dataCtx.fill();
 
-                    ctx.oriDataCtx.beginPath();
-                    if (isSelected) {
-                        ctx.oriDataCtx.fillStyle = "rgb(0,200,0)";
-                    } else {
-                        ctx.oriDataCtx.fillStyle = "rgb(200,0,0)";
-                    }
-                    ctx.oriDataCtx.arc(ix, iy, 3, 0, 2.0 * Math.PI, true);
-                    ctx.oriDataCtx.fill();
-                },
+                ctx.oriDataCtx.beginPath();
+                if (isSelected) {
+                    ctx.oriDataCtx.fillStyle = "rgb(0,200,0)";
+                } else {
+                    ctx.oriDataCtx.fillStyle = "rgb(200,0,0)";
+                }
+                ctx.oriDataCtx.arc(ix, iy, 3, 0, 2.0 * Math.PI, true);
+                ctx.oriDataCtx.fill();
+            },
 
             drawArc =
-                function (sx, sy, ix, iy, theta1, theta2) {
-                    ctx.dataCtx.beginPath();
-                    ctx.dataCtx.strokeStyle = "rgb(0,0,10)";
-                    ctx.dataCtx.arc(sx, sy, 15, theta1, theta2, true);
-                    ctx.dataCtx.stroke();
+            function(sx, sy, ix, iy, theta1, theta2) {
+                ctx.dataCtx.beginPath();
+                ctx.dataCtx.strokeStyle = "rgb(0,0,10)";
+                ctx.dataCtx.arc(sx, sy, 15, theta1, theta2, true);
+                ctx.dataCtx.stroke();
 
-                    ctx.oriDataCtx.beginPath();
-                    ctx.oriDataCtx.strokeStyle = "rgb(0,0,10)";
-                    ctx.oriDataCtx.arc(ix, iy, 15, theta1, theta2, true);
-                    ctx.oriDataCtx.stroke();
-                },
+                ctx.oriDataCtx.beginPath();
+                ctx.oriDataCtx.strokeStyle = "rgb(0,0,10)";
+                ctx.oriDataCtx.arc(ix, iy, 15, theta1, theta2, true);
+                ctx.oriDataCtx.stroke();
+            },
 
             drawLabel =
-                function (sx, sy, ix, iy, lab) {
-                    var labelWidth;
+            function(sx, sy, ix, iy, lab) {
+                var labelWidth;
 
-                    sx = parseInt(sx, 10);
-                    sy = parseInt(sy, 10);
-                    ix = parseInt(ix, 10);
-                    iy = parseInt(iy, 10);
+                sx = parseInt(sx, 10);
+                sy = parseInt(sy, 10);
+                ix = parseInt(ix, 10);
+                iy = parseInt(iy, 10);
 
-                    ctx.dataCtx.font = "14px sans-serif";
-                    labelWidth = ctx.dataCtx.measureText(lab).width;
-                    ctx.dataCtx.fillStyle = "rgba(255, 255, 255, 0.7)";
-                    ctx.dataCtx.fillRect(sx - 5, sy - 15, labelWidth + 10, 25);
-                    ctx.dataCtx.fillStyle = "rgb(200, 0, 0)";
-                    ctx.dataCtx.fillText(lab, sx, sy);
+                ctx.dataCtx.font = "14px sans-serif";
+                labelWidth = ctx.dataCtx.measureText(lab).width;
+                ctx.dataCtx.fillStyle = "rgba(255, 255, 255, 0.7)";
+                ctx.dataCtx.fillRect(sx - 5, sy - 15, labelWidth + 10, 25);
+                ctx.dataCtx.fillStyle = "rgb(200, 0, 0)";
+                ctx.dataCtx.fillText(lab, sx, sy);
 
-                    ctx.oriDataCtx.font = "14px sans-serif";
-                    labelWidth = ctx.oriDataCtx.measureText(lab).width;
-                    ctx.oriDataCtx.fillStyle = "rgba(255, 255, 255, 0.7)";
-                    ctx.oriDataCtx.fillRect(ix - 5, iy - 15, labelWidth + 10, 25);
-                    ctx.oriDataCtx.fillStyle = "rgb(200, 0, 0)";
-                    ctx.oriDataCtx.fillText(lab, ix, iy);
-                },
+                ctx.oriDataCtx.font = "14px sans-serif";
+                labelWidth = ctx.oriDataCtx.measureText(lab).width;
+                ctx.oriDataCtx.fillStyle = "rgba(255, 255, 255, 0.7)";
+                ctx.oriDataCtx.fillRect(ix - 5, iy - 15, labelWidth + 10, 25);
+                ctx.oriDataCtx.fillStyle = "rgb(200, 0, 0)";
+                ctx.oriDataCtx.fillText(lab, ix, iy);
+            },
 
             drawDistances =
-                function () {
-                    var distData = mode.getData(),
-                        conn_count = distData.connectionCount(),
-                        conni,
-                        plist, x0, y0, x1, y1, spx0, spx1, dist, isSelected0, isSelected1,
-                        axes = mode.getAxes();
+            function() {
+                var distData = mode.getData(),
+                    conn_count = distData.connectionCount(),
+                    conni,
+                    plist, x0, y0, x1, y1, spx0, spx1, dist, isSelected0, isSelected1,
+                    axes = mode.getAxes();
 
-                    for (conni = 0; conni < conn_count; conni++) {
-                        plist = distData.getConnectionAt(conni);
-                        x0 = plist[0];
-                        y0 = plist[1];
-                        x1 = plist[2];
-                        y1 = plist[3];
-                        isSelected0 = distData.isPointSelected(conni, 0);
-                        isSelected1 = distData.isPointSelected(conni, 1);
-                        if (wpd.appData.isAligned() === true && axes instanceof wpd.MapAxes) {
-                            dist = 'Dist' + conni.toString() + ': ' +
-                                axes.pixelToDataDistance(distData.getDistance(conni)).toFixed(2) +
-                                ' ' + axes.getUnits();
-                        } else {
-                            dist = 'Dist' + conni.toString() + ': ' +
-                                distData.getDistance(conni).toFixed(2) + ' px';
-                        }
-                        spx0 = wpd.graphicsWidget.screenPx(x0, y0);
-                        spx1 = wpd.graphicsWidget.screenPx(x1, y1);
-
-                        // draw connecting lines:
-                        drawLine(spx0.x, spx0.y, spx1.x, spx1.y, x0, y0, x1, y1);
-
-                        // draw data points:
-                        drawPoint(spx0.x, spx0.y, x0, y0, isSelected0);
-                        drawPoint(spx1.x, spx1.y, x1, y1, isSelected1);
-
-                        // distance label
-                        drawLabel(0.5 * (spx0.x + spx1.x), 0.5 * (spx0.y + spx1.y), 0.5 * (x0 + x1),
-                            0.5 * (y0 + y1), dist);
+                for (conni = 0; conni < conn_count; conni++) {
+                    plist = distData.getConnectionAt(conni);
+                    x0 = plist[0];
+                    y0 = plist[1];
+                    x1 = plist[2];
+                    y1 = plist[3];
+                    isSelected0 = distData.isPointSelected(conni, 0);
+                    isSelected1 = distData.isPointSelected(conni, 1);
+                    if (wpd.appData.isAligned() === true && axes instanceof wpd.MapAxes) {
+                        dist = 'Dist' + conni.toString() + ': ' +
+                            axes.pixelToDataDistance(distData.getDistance(conni)).toFixed(2) +
+                            ' ' + axes.getUnits();
+                    } else {
+                        dist = 'Dist' + conni.toString() + ': ' +
+                            distData.getDistance(conni).toFixed(2) + ' px';
                     }
-                },
+                    spx0 = wpd.graphicsWidget.screenPx(x0, y0);
+                    spx1 = wpd.graphicsWidget.screenPx(x1, y1);
+
+                    // draw connecting lines:
+                    drawLine(spx0.x, spx0.y, spx1.x, spx1.y, x0, y0, x1, y1);
+
+                    // draw data points:
+                    drawPoint(spx0.x, spx0.y, x0, y0, isSelected0);
+                    drawPoint(spx1.x, spx1.y, x1, y1, isSelected1);
+
+                    // distance label
+                    drawLabel(0.5 * (spx0.x + spx1.x), 0.5 * (spx0.y + spx1.y), 0.5 * (x0 + x1),
+                        0.5 * (y0 + y1), dist);
+                }
+            },
 
             drawAngles =
-                function () {
-                    var angleData = mode.getData(),
-                        conn_count = angleData.connectionCount(),
-                        conni,
-                        plist, x0, y0, x1, y1, x2, y2, spx0, spx1, spx2, theta1, theta2, theta,
-                        isSelected0, isSelected1, isSelected2;
-                    for (conni = 0; conni < conn_count; conni++) {
-                        plist = angleData.getConnectionAt(conni);
-                        x0 = plist[0];
-                        y0 = plist[1];
-                        x1 = plist[2];
-                        y1 = plist[3];
-                        x2 = plist[4];
-                        y2 = plist[5];
-                        isSelected0 = angleData.isPointSelected(conni, 0);
-                        isSelected1 = angleData.isPointSelected(conni, 1);
-                        isSelected2 = angleData.isPointSelected(conni, 2);
-                        theta = 'Theta' + conni.toString() + ': ' +
-                            angleData.getAngle(conni).toFixed(2) + '°';
-                        theta1 = Math.atan2((y0 - y1), x0 - x1);
-                        theta2 = Math.atan2((y2 - y1), x2 - x1);
-                        spx0 = wpd.graphicsWidget.screenPx(x0, y0);
-                        spx1 = wpd.graphicsWidget.screenPx(x1, y1);
-                        spx2 = wpd.graphicsWidget.screenPx(x2, y2);
+            function() {
+                var angleData = mode.getData(),
+                    conn_count = angleData.connectionCount(),
+                    conni,
+                    plist, x0, y0, x1, y1, x2, y2, spx0, spx1, spx2, theta1, theta2, theta,
+                    isSelected0, isSelected1, isSelected2;
+                for (conni = 0; conni < conn_count; conni++) {
+                    plist = angleData.getConnectionAt(conni);
+                    x0 = plist[0];
+                    y0 = plist[1];
+                    x1 = plist[2];
+                    y1 = plist[3];
+                    x2 = plist[4];
+                    y2 = plist[5];
+                    isSelected0 = angleData.isPointSelected(conni, 0);
+                    isSelected1 = angleData.isPointSelected(conni, 1);
+                    isSelected2 = angleData.isPointSelected(conni, 2);
+                    theta = 'Theta' + conni.toString() + ': ' +
+                        angleData.getAngle(conni).toFixed(2) + '°';
+                    theta1 = Math.atan2((y0 - y1), x0 - x1);
+                    theta2 = Math.atan2((y2 - y1), x2 - x1);
+                    spx0 = wpd.graphicsWidget.screenPx(x0, y0);
+                    spx1 = wpd.graphicsWidget.screenPx(x1, y1);
+                    spx2 = wpd.graphicsWidget.screenPx(x2, y2);
 
-                        // draw connecting lines:
-                        drawLine(spx0.x, spx0.y, spx1.x, spx1.y, x0, y0, x1, y1);
-                        drawLine(spx1.x, spx1.y, spx2.x, spx2.y, x1, y1, x2, y2);
+                    // draw connecting lines:
+                    drawLine(spx0.x, spx0.y, spx1.x, spx1.y, x0, y0, x1, y1);
+                    drawLine(spx1.x, spx1.y, spx2.x, spx2.y, x1, y1, x2, y2);
 
-                        // draw data points:
-                        drawPoint(spx0.x, spx0.y, x0, y0, isSelected0);
-                        drawPoint(spx1.x, spx1.y, x1, y1, isSelected1);
-                        drawPoint(spx2.x, spx2.y, x2, y2, isSelected2);
+                    // draw data points:
+                    drawPoint(spx0.x, spx0.y, x0, y0, isSelected0);
+                    drawPoint(spx1.x, spx1.y, x1, y1, isSelected1);
+                    drawPoint(spx2.x, spx2.y, x2, y2, isSelected2);
 
-                        // draw angle arc:
-                        drawArc(spx1.x, spx1.y, x1, y1, theta1, theta2);
+                    // draw angle arc:
+                    drawArc(spx1.x, spx1.y, x1, y1, theta1, theta2);
 
-                        // angle label
-                        drawLabel(spx1.x + 10, spx1.y + 15, x1 + 10, y1 + 15, theta);
-                    }
-                },
+                    // angle label
+                    drawLabel(spx1.x + 10, spx1.y + 15, x1 + 10, y1 + 15, theta);
+                }
+            },
 
-            drawPolygons = function () {
+            drawPolygons = function() {
                 let connData = mode.getData();
                 let connCount = connData.connectionCount();
                 let axes = mode.getAxes();
@@ -11031,9 +11031,9 @@ wpd.MeasurementRepainter = (function () {
 
         this.painterName = 'measurementRepainter-' + mode.name;
 
-        this.onAttach = function () { };
+        this.onAttach = function() {};
 
-        this.onRedraw = function () {
+        this.onRedraw = function() {
             if (mode.name === wpd.measurementModes.distance.name) {
                 drawDistances();
             } else if (mode.name === wpd.measurementModes.angle.name) {
@@ -11043,7 +11043,7 @@ wpd.MeasurementRepainter = (function () {
             }
         };
 
-        this.onForcedRedraw = function () {
+        this.onForcedRedraw = function() {
             wpd.graphicsWidget.resetData();
             this.onRedraw();
         };
@@ -11072,7 +11072,7 @@ wpd.MeasurementRepainter = (function () {
 
 var wpd = wpd || {};
 
-wpd.args = (function () {
+wpd.args = (function() {
     // Simple argument parser
     // e.g.
     // if WPD is launched as http://localhost:8000/index.html?q=1
@@ -11119,7 +11119,7 @@ wpd.args = (function () {
 
 var wpd = wpd || {};
 
-wpd.dataExport = (function () {
+wpd.dataExport = (function() {
     function show() {
         // open dialog box explaining data format
     }
@@ -11292,7 +11292,7 @@ wpd.dataExport = (function () {
 
 var wpd = wpd || {};
 
-wpd.download = (function () {
+wpd.download = (function() {
 
     function textFile(data, filename) {
         let $downloadElem = document.createElement('a');
@@ -11351,12 +11351,12 @@ wpd.download = (function () {
 
 var wpd = wpd || {};
 
-wpd.events = (function () {
+wpd.events = (function() {
     let _registeredEvents = {};
 
     // polyfill for IE9+
     if (typeof window.CustomEvent !== "function") {
-        window.CustomEvent = function (event, params) {
+        window.CustomEvent = function(event, params) {
             params = params || {
                 bubbles: false,
                 cancelable: false,
@@ -11487,7 +11487,7 @@ wpd.events = (function () {
 
 var wpd = wpd || {};
 
-wpd.log = function () {
+wpd.log = function() {
     // Capture some basic info that helps WPD development.
     // Never capture anything about the data here!
 
@@ -11497,9 +11497,9 @@ wpd.log = function () {
     }
 
     // if server has disabled logging, then skip
-    fetch("log").then(function (response) {
+    fetch("log").then(function(response) {
         return response.text();
-    }).then(function (text) {
+    }).then(function(text) {
         if (text == "true") {
             // logging is enabled
             let data = {};
@@ -11542,7 +11542,7 @@ wpd.log = function () {
 
 var wpd = wpd || {};
 
-wpd.plotly = (function () {
+wpd.plotly = (function() {
     function send(dataObject) {
         var formContainer = document.createElement('div'),
             formElement = document.createElement('form'),
@@ -11799,7 +11799,7 @@ wpd.saveResume = (function () {
 
 var wpd = wpd || {};
 
-wpd.scriptInjector = (function () {
+wpd.scriptInjector = (function() {
     function start() {
         wpd.popup.show('runScriptPopup');
     }
@@ -11813,7 +11813,7 @@ wpd.scriptInjector = (function () {
         wpd.popup.close('runScriptPopup');
         if ($scriptFileInput.files.length == 1) {
             var fileReader = new FileReader();
-            fileReader.onload = function () {
+            fileReader.onload = function() {
                 if (typeof wpdscript !== "undefined") {
                     wpdscript = null;
                 }
@@ -11827,9 +11827,9 @@ wpd.scriptInjector = (function () {
         }
     }
 
-    function injectHTML() { }
+    function injectHTML() {}
 
-    function injectCSS() { }
+    function injectCSS() {}
 
     return {
         start: start,
@@ -11860,7 +11860,7 @@ wpd.scriptInjector = (function () {
 var wpd = wpd || {};
 
 // maintain and manage current state of the application
-wpd.appData = (function () {
+wpd.appData = (function() {
     let _plotData = null;
     let _undoManager = null;
     let _pageManager = null;
@@ -12569,7 +12569,7 @@ wpd.CircularChartRecorderCalibrator = class extends wpd.AxesCalibrator {
     }
 };
 
-wpd.alignAxes = (function () {
+wpd.alignAxes = (function() {
     let calibration = null;
     let calibrator = null;
 
@@ -12922,7 +12922,7 @@ wpd.alignAxes = (function () {
 
 // browserInfo.js - browser and available HTML5 feature detection
 var wpd = wpd || {};
-wpd.browserInfo = (function () {
+wpd.browserInfo = (function() {
     function checkBrowser() {
         if (!window.FileReader || typeof WebAssembly !== "object" || !("download" in document.createElement("a"))) {
             alert(
@@ -12964,7 +12964,7 @@ wpd.browserInfo = (function () {
 
 var wpd = wpd || {};
 
-wpd.colorSelectionWidget = (function () {
+wpd.colorSelectionWidget = (function() {
     var color, triggerElementId, title, setColorDelegate;
 
     function setParams(params) {
@@ -13022,7 +13022,7 @@ wpd.colorSelectionWidget = (function () {
     function pickColor() {
         wpd.popup.close('color-selection-widget');
         let tool = new wpd.ColorPickerTool();
-        tool.onComplete = function (col) {
+        tool.onComplete = function(col) {
             color = col;
             setColorDelegate(col);
             wpd.graphicsWidget.removeTool();
@@ -13093,7 +13093,7 @@ wpd.colorSelectionWidget = (function () {
     };
 })();
 
-wpd.colorPicker = (function () {
+wpd.colorPicker = (function() {
     function getAutoDetectionData() {
         let ds = wpd.tree.getActiveDataset();
         return wpd.appData.getPlotData().getAutoDetectionDataForDataset(ds);
@@ -13105,7 +13105,7 @@ wpd.colorPicker = (function () {
             color: ad.fgColor,
             triggerElementId: 'color-button',
             title: wpd.gettext('specify-foreground-color'),
-            setColorDelegate: function (col) {
+            setColorDelegate: function(col) {
                 ad.fgColor = col;
             }
         };
@@ -13117,7 +13117,7 @@ wpd.colorPicker = (function () {
             color: ad.bgColor,
             triggerElementId: 'color-button',
             title: wpd.gettext('specify-background-color'),
-            setColorDelegate: function (col) {
+            setColorDelegate: function(col) {
                 ad.bgColor = col;
             }
         };
@@ -13210,7 +13210,7 @@ wpd.colorPicker = (function () {
 
 var wpd = wpd || {};
 
-wpd.dataSeriesManagement = (function () {
+wpd.dataSeriesManagement = (function() {
     function datasetWithNameExists(name) {
         const plotData = wpd.appData.getPlotData();
         const dsNameColl = plotData.getDatasetNames();
@@ -13286,7 +13286,7 @@ wpd.dataSeriesManagement = (function () {
         if (datasetWithNameExists($singleDatasetName.value.trim())) {
             wpd.messagePopup.show(wpd.gettext("add-dataset-error"),
                 wpd.gettext("dataset-exists-error"),
-                function () {
+                function() {
                     wpd.popup.show('add-dataset-popup');
                 });
             return;
@@ -13340,7 +13340,7 @@ wpd.dataSeriesManagement = (function () {
         } else {
             wpd.messagePopup(wpd.gettext("add-dataset-error"),
                 wpd.gettext("add-dataset-count-error"),
-                function () {
+                function() {
                     wpd.popup.show('add-dataset-popup');
                 });
         }
@@ -13348,7 +13348,7 @@ wpd.dataSeriesManagement = (function () {
 
     function deleteDataset() {
         wpd.okCancelPopup.show(wpd.gettext("delete-dataset"), wpd.gettext("delete-dataset-text"),
-            function () {
+            function() {
                 const plotData = wpd.appData.getPlotData();
                 const ds = wpd.tree.getActiveDataset();
                 plotData.deleteDataset(ds);
@@ -13383,7 +13383,7 @@ wpd.dataSeriesManagement = (function () {
             color: wpd.tree.getActiveDataset().colorRGB.getRGB(),
             triggerElementId: 'dataset-display-color-picker-button',
             title: 'Specify Display Color for Digitized Points',
-            setColorDelegate: function (col) {
+            setColorDelegate: function(col) {
                 wpd.tree.getActiveDataset().colorRGB = new wpd.Color(col[0], col[1], col[2]);
                 wpd.graphicsWidget.forceHandlerRepaint();
                 wpd.tree.refreshPreservingSelection();
@@ -13568,7 +13568,7 @@ wpd.FileManager = class {
         wpd.appData.setUndoManager(undoManager);
     }
 
-    switch(index) {
+    switch (index) {
         const newIndex = parseInt(index, 10);
         if (newIndex !== this.currentIndex && newIndex > -1 && newIndex <= this.files.length) {
             // save page manager
@@ -13736,7 +13736,7 @@ wpd.FileManager = class {
                 } else {
                     filePromise = new Promise((resolve, reject) => {
                         let reader = new FileReader();
-                        reader.onload = function () {
+                        reader.onload = function() {
                             pdfjsLib.getDocument(reader.result).promise.then(pdf => resolve(pdf));
                         };
                         reader.readAsDataURL(this.files[index]);
@@ -13853,7 +13853,7 @@ wpd.FileManager = class {
 
 var wpd = wpd || {};
 
-wpd.gridDetection = (function () {
+wpd.gridDetection = (function() {
     function start() {
         wpd.graphicsWidget.removeTool();
         wpd.graphicsWidget.removeRepainter();
@@ -14055,7 +14055,7 @@ wpd.gridDetection = (function () {
             color: wpd.appData.getPlotData().getGridDetectionData().lineColor,
             triggerElementId: 'grid-color-picker-button',
             title: 'Specify Grid Line Color',
-            setColorDelegate: function (
+            setColorDelegate: function(
                 col) {
                 wpd.appData.getPlotData().getGridDetectionData().lineColor = col;
             }
@@ -14127,7 +14127,7 @@ wpd.gridDetection = (function () {
 
 var wpd = wpd || {};
 
-wpd.gettext = function (stringId) {
+wpd.gettext = function(stringId) {
     let $str = document.getElementById('i18n-string-' + stringId);
     if ($str) {
         return $str.innerHTML;
@@ -14157,7 +14157,7 @@ wpd.gettext = function (stringId) {
 var wpd = wpd || {};
 
 wpd.imageEditing = {
-    showImageInfo: function () {
+    showImageInfo: function() {
         let $imageDimensions = document.getElementById('image-info-dimensions');
         let imageInfo = wpd.imageManager.getImageInfo();
         $imageDimensions.innerHTML = '(' + imageInfo.width + 'x' + imageInfo.height + ')';
@@ -14169,31 +14169,31 @@ wpd.imageEditing = {
         wpd.popup.show('image-info-popup');
     },
 
-    startImageCrop: function () {
+    startImageCrop: function() {
         wpd.graphicsWidget.setTool(new wpd.CropTool());
     },
 
-    startPerspective: function () {
+    startPerspective: function() {
         wpd.popup.show('perspective-info');
     },
 
-    startPerspectiveConfirmed: function () {
+    startPerspectiveConfirmed: function() {
 
     },
 
-    undo: function () {
+    undo: function() {
         wpd.appData.getUndoManager().undo();
     },
 
-    redo: function () {
+    redo: function() {
         wpd.appData.getUndoManager().redo();
     }
 };
 
 wpd.ReversibleAction = class {
-    constructor() { }
-    execute() { }
-    undo() { }
+    constructor() {}
+    execute() {}
+    undo() {}
 };
 
 wpd.CropImageAction = class extends wpd.ReversibleAction {
@@ -14221,7 +14221,7 @@ wpd.CropImageAction = class extends wpd.ReversibleAction {
         let croppedHeight = Math.abs(height);
 
         // replace current image with cropped image
-        let imageOp = function (imageData, width, height) {
+        let imageOp = function(imageData, width, height) {
             return {
                 imageData: croppedImage,
                 width: croppedWidth,
@@ -14236,7 +14236,7 @@ wpd.CropImageAction = class extends wpd.ReversibleAction {
     undo() {
         // set the saved image
         let originalImage = this._originalImage;
-        let imageOp = function (imageData, width, height) {
+        let imageOp = function(imageData, width, height) {
             return {
                 imageData: originalImage,
                 width: originalImage.width,
@@ -15033,7 +15033,7 @@ wpd.measurementModes = {
         addButtonId: 'add-pair-button',
         deleteButtonId: 'delete-pair-button',
         sidebarId: 'measure-distances-sidebar',
-        init: function () {
+        init: function() {
             const plotData = wpd.appData.getPlotData();
             const fileManager = wpd.appData.getFileManager();
             const distMeasures = fileManager.filterToCurrentFileMeasurements(
@@ -15067,7 +15067,7 @@ wpd.measurementModes = {
                 }
             }
         },
-        clear: function () {
+        clear: function() {
             const plotData = wpd.appData.getPlotData();
             const fileManager = wpd.appData.getFileManager();
             let distMeasures = fileManager.filterToCurrentFileMeasurements(
@@ -15085,7 +15085,7 @@ wpd.measurementModes = {
             plotData.deleteMeasurement(distMeasures[0]);
             wpd.tree.refresh();
         },
-        getData: function () {
+        getData: function() {
             const plotData = wpd.appData.getPlotData();
             let distMeasures = wpd.appData.getFileManager().filterToCurrentFileMeasurements(
                 plotData.getMeasurementsByType(wpd.DistanceMeasurement)
@@ -15096,7 +15096,7 @@ wpd.measurementModes = {
             }
             return distMeasures[0];
         },
-        getAxes: function () {
+        getAxes: function() {
             const plotData = wpd.appData.getPlotData();
             let distMeasures = wpd.appData.getFileManager().filterToCurrentFileMeasurements(
                 plotData.getMeasurementsByType(wpd.DistanceMeasurement)
@@ -15107,7 +15107,7 @@ wpd.measurementModes = {
             }
             return plotData.getAxesForMeasurement(distMeasures[0]);
         },
-        changeAxes: function (axIdx) {
+        changeAxes: function(axIdx) {
             const plotData = wpd.appData.getPlotData();
             let distMeasures = wpd.appData.getFileManager().filterToCurrentFileMeasurements(
                 plotData.getMeasurementsByType(wpd.DistanceMeasurement)
@@ -15132,7 +15132,7 @@ wpd.measurementModes = {
         addButtonId: 'add-angle-button',
         deleteButtonId: 'delete-angle-button',
         sidebarId: 'measure-angles-sidebar',
-        init: function () {
+        init: function() {
             const plotData = wpd.appData.getPlotData();
             const fileManager = wpd.appData.getFileManager();
             const angleMeasures = fileManager.filterToCurrentFileMeasurements(
@@ -15154,7 +15154,7 @@ wpd.measurementModes = {
                 }
             }
         },
-        clear: function () {
+        clear: function() {
             const plotData = wpd.appData.getPlotData();
             const fileManager = wpd.appData.getFileManager();
             let angleMeasures = fileManager.filterToCurrentFileMeasurements(
@@ -15172,7 +15172,7 @@ wpd.measurementModes = {
             plotData.deleteMeasurement(angleMeasures[0]);
             wpd.tree.refresh();
         },
-        getData: function () {
+        getData: function() {
             let plotData = wpd.appData.getPlotData();
             let angleMeasures = wpd.appData.getFileManager().filterToCurrentFileMeasurements(
                 plotData.getMeasurementsByType(wpd.AngleMeasurement)
@@ -15190,7 +15190,7 @@ wpd.measurementModes = {
         addButtonId: 'add-polygon-button',
         deleteButtonId: 'delete-polygon-button',
         sidebarId: 'measure-area-sidebar',
-        init: function () {
+        init: function() {
             const plotData = wpd.appData.getPlotData();
             const fileManager = wpd.appData.getFileManager();
             let areaMeasures = fileManager.filterToCurrentFileMeasurements(
@@ -15213,7 +15213,7 @@ wpd.measurementModes = {
                 }
             }
         },
-        clear: function () {
+        clear: function() {
             const plotData = wpd.appData.getPlotData();
             const fileManager = wpd.appData.getFileManager();
             let areaMeasures = fileManager.filterToCurrentFileMeasurements(
@@ -15231,7 +15231,7 @@ wpd.measurementModes = {
             plotData.deleteMeasurement(areaMeasures[0]);
             wpd.tree.refresh();
         },
-        getData: function () {
+        getData: function() {
             const plotData = wpd.appData.getPlotData();
             let areaMeasures = wpd.appData.getFileManager().filterToCurrentFileMeasurements(
                 plotData.getMeasurementsByType(wpd.AreaMeasurement)
@@ -15242,7 +15242,7 @@ wpd.measurementModes = {
             }
             return areaMeasures[0];
         },
-        getAxes: function () {
+        getAxes: function() {
             const plotData = wpd.appData.getPlotData();
             let areaMeasures = wpd.appData.getFileManager().filterToCurrentFileMeasurements(
                 plotData.getMeasurementsByType(wpd.AreaMeasurement)
@@ -15253,7 +15253,7 @@ wpd.measurementModes = {
             }
             return plotData.getAxesForMeasurement(areaMeasures[0]);
         },
-        changeAxes: function (axIdx) {
+        changeAxes: function(axIdx) {
             const plotData = wpd.appData.getPlotData();
             let areaMeasures = wpd.appData.getFileManager().filterToCurrentFileMeasurements(
                 plotData.getMeasurementsByType(wpd.AreaMeasurement)
@@ -15274,7 +15274,7 @@ wpd.measurementModes = {
     }
 };
 
-wpd.measurement = (function () {
+wpd.measurement = (function() {
     var activeMode;
 
     function start(mode) {
@@ -15790,7 +15790,7 @@ wpd.UndoManager = class {
 
 var wpd = wpd || {};
 
-wpd.utils = (function () {
+wpd.utils = (function() {
     function toggleElementsDisplay(elements, hide) {
         for (const $el of elements) $el.hidden = hide;
     }
